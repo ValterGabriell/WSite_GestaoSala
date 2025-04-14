@@ -1,0 +1,24 @@
+<div class="agenda">
+    @for (dia of atribuicoes; track dia.dia) {
+    <h2>Dia {{ dia.dia }}</h2>
+    <div class="agenda-grid">
+        <div class="agenda-hours">
+            @for (hora of horas; track hora) {
+            <div class="hour-label">{{ hora }}:00</div>
+            }
+        </div>
+
+        <div class="agenda-salas">
+            @for (sala of dia.salas; track sala.salaId) {
+            <div class="evento" [style.top.%]="(sala.horaInit - 7) * (100 / horas.length)"
+                [style.height.%]="(sala.horaFinal - sala.horaInit) * (100 / horas.length)"
+                [style.background]="sala.professor.color">
+                <strong>{{ sala.disciplina.sigla }}</strong><br />
+                {{ sala.professor.name }}<br />
+                <small>{{ sala.tblSala.name }}</small>
+            </div>
+            }
+        </div>
+    </div>
+    }
+</div>

@@ -1,0 +1,13 @@
+<div class="user-list">
+    <h2>Lista de Usuários</h2>
+    @for (user of mockedUsers; track user.id) {
+    <div class="user-card" [style.borderColor]="user.color">
+        <h3 [style.color]="user.color">{{ user.name }}</h3>
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Telefone:</strong> {{ user.mobilePhone }}</p>
+        <p><strong>Ativo:</strong> {{ user.isActive ? 'Sim' : 'Não' }}</p>
+        <p><strong>Último Login:</strong> {{ user.lastLogin }}</p>
+    </div>
+    }
+</div>
