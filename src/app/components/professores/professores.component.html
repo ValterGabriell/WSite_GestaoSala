@@ -1,13 +1,36 @@
 <div class="user-list">
-    <h2>Lista de Usuários</h2>
-    @for (user of mockedUsers; track user.id) {
-    <div class="user-card" [style.borderColor]="user.color">
-        <h3 [style.color]="user.color">{{ user.name }}</h3>
-        <p><strong>Username:</strong> {{ user.username }}</p>
-        <p><strong>Email:</strong> {{ user.email }}</p>
-        <p><strong>Telefone:</strong> {{ user.mobilePhone }}</p>
-        <p><strong>Ativo:</strong> {{ user.isActive ? 'Sim' : 'Não' }}</p>
-        <p><strong>Último Login:</strong> {{ user.lastLogin }}</p>
+    <h2>Lista de Professores</h2>
+
+    @if (this.currentState === 'LOADING') {
+    <p>Carregando professores...</p>
+    }
+
+    @if (!listaProfessores.success) {
+    <p style="color: red;">
+        {{ listaProfessores.message }}<br />
+        @if (listaProfessores.error) {
+        <small>Erro técnico: {{ listaProfessores.error }}</small>
+        }
+    </p>
+    }
+
+    @if (listaProfessores.success
+    && listaProfessores.data !== undefined
+    && listaProfessores.data!.length === 0) {
+    <p>Nenhum professor encontrado.</p>
+    } @else {
+
+    <div class="user-cards-grid">
+        @for (professor of listaProfessores.data; track professor.id) {
+        <div class="user-card" [style.borderColor]="professor.color">
+            <h3 [style.color]="professor.color">{{ professor.name }}</h3>
+            <p><strong>Username:</strong> {{ professor.username }}</p>
+            <p><strong>Email:</strong> {{ professor.email }}</p>
+            <p><strong>Telefone:</strong> {{ professor.mobilePhone }}</p>
+            <p><strong>Ativo:</strong> {{ professor.isActive ? 'Sim' : 'Não' }}</p>
+            <p><strong>Último Login:</strong> {{ professor.lastLogin }}</p>
+        </div>
+        }
     </div>
     }
 </div>

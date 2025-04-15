@@ -1,1 +1,34 @@
-<p>disciplinas works!</p>
+<div class="disciplina-list">
+    <h2>Lista de Disciplinas</h2>
+
+    @if (this.currentState === 'LOADING') {
+    <p>Carregando disciplinas...</p>
+    }
+
+    @if (!listaDisciplina.success) {
+    <p style="color: red;">
+        {{ listaDisciplina.message }}<br />
+        @if (listaDisciplina.error) {
+        <small>Erro técnico: {{ listaDisciplina.error }}</small>
+        }
+    </p>
+    }
+
+    @if (listaDisciplina.success
+    && listaDisciplina.data !== undefined
+    && listaDisciplina.data!.length === 0) {
+    <p>Nenhum disciplina encontrado.</p>
+    } @else {
+
+    <div class="disciplina-cards-grid">
+        @for (disciplina of listaDisciplina.data; track disciplina.id) {
+        <div class="disciplina-card">
+            <h3>{{ disciplina.nome }} - {{ disciplina.sigla }}</h3>
+            <p><strong>Carga Horária:</strong> {{ disciplina.cargaHoraria }}</p>
+            <p><strong>Código:</strong> {{ disciplina.codigo }}</p>
+            <p><strong>Total Aulas:</strong> {{ disciplina.totalAulas }}</p>
+        </div>
+        }
+    </div>
+    }
+</div>

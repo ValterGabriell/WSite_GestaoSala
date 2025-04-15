@@ -1,57 +1,8 @@
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-professores',
-  imports: [],
-  templateUrl: './professores.component.html',
-  styleUrl: './professores.component.css'
-})
-export class ProfessoresComponent {
-  meuBooleano = false;
-
-  mockedUsers: IProfessor[] = [
-    {
-      id: 0,
-      isActive: true,
-      creationDate: "2025-04-14T16:45:51.341Z",
-      lastLogin: "2025-04-14T16:45:51.341Z",
-      name: "João Silva",
-      mobilePhone: "+55 11 91234-5678",
-      email: "joao.silva@email.com",
-      username: "joaosilva",
-      color: "#FF5733"
-    },
-    {
-      id: 1,
-      isActive: false,
-      creationDate: "2024-12-20T09:30:00.000Z",
-      lastLogin: "2025-01-10T14:12:45.000Z",
-      name: "Maria Oliveira",
-      mobilePhone: "+55 21 99876-5432",
-      email: "maria.oliveira@email.com",
-      username: "maria.oliveira",
-      color: "#33C1FF"
-    },
-    {
-      id: 2,
-      isActive: true,
-      creationDate: "2025-03-01T12:00:00.000Z",
-      lastLogin: "2025-04-13T17:00:00.000Z",
-      name: "Carlos Souza",
-      mobilePhone: "+55 31 98765-4321",
-      email: "carlos.souza@email.com",
-      username: "carlossouza",
-      color: "#8E44AD"
-    }
-  ];
-
-  atualizaBooleano(valor: boolean) {
-    this.meuBooleano = valor;
-  }
-
-
-
-}
+import { Component, inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { GlobalState } from '../../util/GlobalState';
+import { firstValueFrom } from 'rxjs';
+import { GlobalResponse } from '../../util/IGlobalResponse';
 
 interface IProfessor {
   id: number;
@@ -64,3 +15,55 @@ interface IProfessor {
   username: string;
   color: string;
 }
+
+@Component({
+  selector: 'app-professores',
+  imports: [],
+  templateUrl: './professores.component.html',
+  styleUrl: './professores.component.css'
+})
+@Injectable({ providedIn: 'root' })
+export class ProfessoresComponent {
+  private http = inject(HttpClient);
+
+  currentState = GlobalState.IDLE;
+  listaProfessores: GlobalResponse<IProfessor[]> = {} as GlobalResponse<IProfessor[]>;
+
+  async getProfessores() {
+    try {
+      this.currentState = GlobalState.LOADING;
+
+
+      const data = await firstValueFrom(this.http.get<IProfessor[]>('http://localhost:5093/api/v1/professor', {
+        params: {
+          Search: '',
+          IsActive: true,
+          PageNumber: 1,
+          PageSize: 50
+        }
+      }));
+      console.log(data);
+
+
+      this.listaProfessores = {
+        success: true,
+        message: 'Professores carregados com sucesso',
+        data: data,
+      }
+    } catch (error) {
+      this.listaProfessores = {
+        success: false,
+        message: 'Erro ao carregar professores',
+        data: [],
+        error: (error as Error).message,
+      };
+    } finally {
+      this.currentState = GlobalState.IDLE;
+    }
+  }
+
+  ngOnInit() {
+    this.getProfessores();
+  }
+}
+
