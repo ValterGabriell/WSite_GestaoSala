@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { ProfessoresComponent } from './components/professores/professores.component';
-import { AtribuicoesComponent } from './components/atribuicoes/atribuicoes.component';
 import { DisciplinasComponent } from './components/disciplinas/disciplinas.component';
+import { AtribuicoesComponent } from './components/atribuicoes/atribuicoes.component';
 
 export const routes: Routes = [
     {

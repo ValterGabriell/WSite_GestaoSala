@@ -1,90 +1,92 @@
 import { Component } from '@angular/core';
-import { CalendarModule } from 'angular-calendar';
+import { CommonModule } from '@angular/common';
+import { CalendarOptions, DateSelectArg, EventClickArg } from '@fullcalendar/core'; // useful for typechecking
+import { FullCalendarModule } from '@fullcalendar/angular';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid'
+import listPlugin from '@fullcalendar/list';
+import multiMonthPlugin from '@fullcalendar/multimonth'
+import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction'; // Para cliques e drag-and-drop
+import ptBrLocale from '@fullcalendar/core/locales/pt-br';
+import { atribuicoes, converterParaEventos } from './mockData';
 
 @Component({
-  selector: 'app-atribuicoes',
-  imports: [CalendarModule],
+  selector: 'app-root',
+  standalone: true,
+  imports: [CommonModule, FullCalendarModule],
   templateUrl: './atribuicoes.component.html',
-  styleUrl: './atribuicoes.component.css'
+  styleUrls: ['./atribuicoes.component.css']
 })
 export class AtribuicoesComponent {
-  atribuicoes = [
-    {
-      dia: "2025-04-14",
-      salas: [
-        {
-          salaId: 1,
-          horaInit: 8,
-          horaFinal: 10,
-          tblSala: { id: 101, isActive: true, creationDate: "2025-04-14", name: "Sala A1" },
-          professor: {
-            id: 201, name: "Ana Souza", email: "ana@escola.com", color: "#FF5733", isActive: true,
-            creationDate: "2025-04-14", lastLogin: "2025-04-14", mobilePhone: "", username: "", password: "", isAdmin: "true"
-          },
-          disciplina: { id: 301, nome: "Matemática", codigo: "MAT101", sigla: "MAT", cargaHoraria: 60, totalAulas: 40 },
-          turma: { id: "1A", turno: "Manhã", bloco: 1, nome: "1º Ano A" }
-        },
-        {
-          salaId: 2,
-          horaInit: 10,
-          horaFinal: 12,
-          tblSala: { id: 102, isActive: true, creationDate: "2025-04-14", name: "Sala B2" },
-          professor: {
-            id: 202, name: "Carlos Lima", email: "carlos@escola.com", color: "#33A8FF", isActive: true,
-            creationDate: "2025-04-14", lastLogin: "2025-04-14", mobilePhone: "", username: "", password: "", isAdmin: "false"
-          },
-          disciplina: { id: 302, nome: "História", codigo: "HIS201", sigla: "HIS", cargaHoraria: 60, totalAulas: 40 },
-          turma: { id: "1B", turno: "Manhã", bloco: 2, nome: "1º Ano B" }
-        }
-      ]
-    },
-    {
-      dia: "2025-04-15",
-      salas: [
-        {
-          salaId: 3,
-          horaInit: 9,
-          horaFinal: 11,
-          tblSala: { id: 103, isActive: true, creationDate: "2025-04-15", name: "Sala C3" },
-          professor: {
-            id: 203, name: "Beatriz Mendes", email: "bea@escola.com", color: "#8E44AD", isActive: true,
-            creationDate: "2025-04-15", lastLogin: "2025-04-15", mobilePhone: "", username: "", password: "", isAdmin: "false"
-          },
-          disciplina: { id: 303, nome: "Geografia", codigo: "GEO301", sigla: "GEO", cargaHoraria: 60, totalAulas: 40 },
-          turma: { id: "2A", turno: "Manhã", bloco: 1, nome: "2º Ano A" }
-        },
-        {
-          salaId: 4,
-          horaInit: 14,
-          horaFinal: 17,
-          tblSala: { id: 104, isActive: true, creationDate: "2025-04-15", name: "Sala D4" },
-          professor: {
-            id: 204, name: "Diego Rocha", email: "diego@escola.com", color: "#27AE60", isActive: true,
-            creationDate: "2025-04-15", lastLogin: "2025-04-15", mobilePhone: "", username: "", password: "", isAdmin: "true"
-          },
-          disciplina: { id: 304, nome: "Química", codigo: "QUI401", sigla: "QUI", cargaHoraria: 60, totalAulas: 40 },
-          turma: { id: "3A", turno: "Tarde", bloco: 3, nome: "3º Ano A" }
-        }
-      ]
-    },
-    {
-      dia: "2025-04-16",
-      salas: [
-        {
-          salaId: 5,
-          horaInit: 7,
-          horaFinal: 9,
-          tblSala: { id: 105, isActive: true, creationDate: "2025-04-16", name: "Sala E5" },
-          professor: {
-            id: 205, name: "Fernanda Lopes", email: "fer@escola.com", color: "#E67E22", isActive: true,
-            creationDate: "2025-04-16", lastLogin: "2025-04-16", mobilePhone: "", username: "", password: "", isAdmin: "true"
-          },
-          disciplina: { id: 305, nome: "Física", codigo: "FIS501", sigla: "FIS", cargaHoraria: 60, totalAulas: 40 },
-          turma: { id: "2B", turno: "Manhã", bloco: 2, nome: "2º Ano B" }
-        }
-      ]
-    }
-  ];
+  title = 'angular17';
+  selectedDate: Date | null = null;
+  dailyEvents: any[] = [];
 
-  horas = Array.from({ length: 12 }, (_, i) => i + 7); // 7h às 18h
+  private isSameDay(date1: Date, date2: Date): boolean {
+    return date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate();
+  }
+
+  handleDateClick(clickInfo: DateClickArg) {
+    console.log(clickInfo);
+
+    this.selectedDate = clickInfo.date;
+
+    const calendarApi = clickInfo.view.calendar;
+    const events = calendarApi.getEvents();
+
+    this.dailyEvents = events
+      .filter(event => this.isSameDay(event.start as Date, clickInfo.date))
+      .map(event => ({
+        title: event.title,
+        start: event.start,
+        end: event.end,
+        color: event.backgroundColor, // ou event.color dependendo do que foi definido
+        professor: event.extendedProps['professor'],
+        disciplina: event.extendedProps['disciplina'],
+        turma: event.extendedProps['turma'],
+        sala: event.extendedProps['sala'],
+        turno: event.extendedProps['turno']
+      }));
+  }
+
+  ngOnInit() {
+
+  };
+  calendarOptions: CalendarOptions = {
+    initialView: 'dayGridMonth',
+    headerToolbar: {
+      left: 'prev,next',
+      center: 'title',
+      right: 'multiMonthYear,dayGridMonth,timeGridWeek,timeGridDay'
+    },
+    height: '800px',
+    plugins: [timeGridPlugin, dayGridPlugin, listPlugin, multiMonthPlugin, interactionPlugin],
+    allDaySlot: false,
+    locales: [ptBrLocale],
+    locale: 'pt-br',
+    events: converterParaEventos(atribuicoes),
+    dateClick: this.handleDateClick.bind(this),
+    // Estilização via options
+    eventColor: '#4f46e5',
+    eventTextColor: '#ffffff',
+    eventBorderColor: '#4338ca',
+    dayHeaderClassNames: 'custom-day-header',
+    dayCellClassNames: 'custom-day-cell',
+    buttonText: {
+      today: 'Hoje',
+      month: 'Mês',
+      week: 'Semana',
+      day: 'Dia',
+      list: 'Lista',
+      multiMonthYear: 'Grid Ano',
+    },
+    buttonIcons: {
+      prev: 'chevron-left',
+      next: 'chevron-right',
+    },
+    firstDay: 1,
+    themeSystem: 'standard',
+  };
 }

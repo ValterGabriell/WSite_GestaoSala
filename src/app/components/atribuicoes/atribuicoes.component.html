@@ -1,24 +1,30 @@
-<div class="agenda">
-    @for (dia of atribuicoes; track dia.dia) {
-    <h2>Dia {{ dia.dia }}</h2>
-    <div class="agenda-grid">
-        <div class="agenda-hours">
-            @for (hora of horas; track hora) {
-            <div class="hour-label">{{ hora }}:00</div>
-            }
+<div class="calendar-container">
+    <div class="calendar-view">
+        <full-calendar [options]="calendarOptions"></full-calendar>
+    </div>
+    <div class="events-sidebar">
+        <h3>Eventos do dia</h3>
+        <div class="selected-date">{{ selectedDate | date:'fullDate':'':'pt' }}</div>
+
+        <div *ngIf="dailyEvents.length === 0" class="no-events">
+            Nenhum evento agendado para este dia
         </div>
 
-        <div class="agenda-salas">
-            @for (sala of dia.salas; track sala.salaId) {
-            <div class="evento" [style.top.%]="(sala.horaInit - 7) * (100 / horas.length)"
-                [style.height.%]="(sala.horaFinal - sala.horaInit) * (100 / horas.length)"
-                [style.background]="sala.professor.color">
-                <strong>{{ sala.disciplina.sigla }}</strong><br />
-                {{ sala.professor.name }}<br />
-                <small>{{ sala.tblSala.name }}</small>
-            </div>
-            }
-        </div>
+        <ul class="events-list">
+            <li *ngFor="let event of dailyEvents" [style.borderLeft]="'4px solid ' + event.color">
+                <div class="event-header">
+                    <span class="event-time">
+                        {{ event.start | date:'HH:mm' }} - {{ event.end | date:'HH:mm' }}
+                    </span>
+                    <span class="event-color" [style.background]="event.color"></span>
+                </div>
+                <div class="event-title">{{ event.title }}</div>
+                <div class="event-details">
+                    <div><strong>Professor:</strong> {{ event.professor }}</div>
+                    <div><strong>Sala:</strong> {{ event.sala }}</div>
+                    <div><strong>Turma:</strong> {{ event.turma }} ({{ event.turno }})</div>
+                </div>
+            </li>
+        </ul>
     </div>
-    }
 </div>
