@@ -1,0 +1,73 @@
+<div class="container">
+    <h2>Atribuir Aulas</h2>
+
+    <!-- Botão de envio -->
+    <div class="form-actions">
+        <button type="submit" class="btn-submit">Atribuir Aulas</button>
+    </div>
+
+    <!-- Layout em colunas: formulário à esquerda, calendário à direita -->
+    <div class="layout-columns">
+
+        <!-- Formulário à esquerda -->
+        <form [formGroup]="atribuirAulaForm" (ngSubmit)="submitForm()" class="form-container">
+            <div class="form-section">
+                <!-- Linha 1: Professor e Turma -->
+                <div class="form-group">
+                    <label for="professor">Professor:</label>
+                    <select id="professor" formControlName="professorId" class="form-control">
+                        <option *ngFor="let professor of professors" [value]="professor.id">{{ professor.label }}
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="turma">Turma:</label>
+                    <select id="turma" formControlName="turmaId" class="form-control">
+                        <option *ngFor="let turma of turmas" [value]="turma.id">{{ turma.label }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <!-- Linha 2: Disciplina, Sala e Horários -->
+                <div class="form-group">
+                    <label for="disciplina">Disciplina:</label>
+                    <select id="disciplina" formControlName="disciplinaId" class="form-control">
+                        <option *ngFor="let disciplina of disciplinas" [value]="disciplina.id">{{ disciplina.label }}
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="sala">Sala:</label>
+                    <select id="sala" formControlName="salaId" class="form-control">
+                        <option *ngFor="let sala of salas" [value]="sala.id">{{ sala.label }}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="startTime">Horário de Início:</label>
+                    <input type="time" id="startTime" formControlName="startTime" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="endTime">Horário de Término:</label>
+                    <input type="time" id="endTime" formControlName="endTime" class="form-control">
+                </div>
+            </div>
+
+            <div *ngIf="diasSelecionadosParaAtribuicao.length > 0" class="selected-days">
+                <h4>Dias selecionados:</h4>
+                <ul>
+                    <li *ngFor="let dia of diasSelecionadosParaAtribuicao">
+                        {{ dia | date:'dd/MM/yyyy':'pt-BR' }}
+                    </li>
+                </ul>
+                <button (click)="limparSelecoes()">Limpar seleções</button>
+            </div>
+        </form>
+
+        <!-- Calendário à direita -->
+        <div class="calendar-container">
+            <full-calendar [options]="calendarOptions"></full-calendar>
+        </div>
+
+    </div>
+</div>

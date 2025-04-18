@@ -79,3 +79,130 @@
     padding: 15px;
     text-align: center;
 }
+
+.loading-spinner {
+    text-align: center;
+    padding: 1rem;
+    font-weight: bold;
+}
+
+.selected-day {
+    background-color: rgba(79, 70, 229, 0.2);
+    /* um fundo levemente roxo */
+    border: 2px solid #4f46e5;
+    /* mesma cor dos eventos */
+    border-radius: 6px;
+}
+
+/* Estilos para o botão "Criar nova atribuição de aula" */
+.create-assignment-btn {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.btn-create {
+    background-color: #4f46e5;
+    /* Cor de fundo roxa */
+    color: white;
+    /* Cor do texto */
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-create:hover {
+    background-color: #4338ca;
+    /* Escurece o botão ao passar o mouse */
+    transform: scale(1.05);
+    /* Efeito de aumento ao passar o mouse */
+}
+
+.btn-create:focus {
+    outline: none;
+}
+
+
+
+.btn-cancel,
+.btn-submit {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-cancel {
+    background-color: #ccc;
+}
+
+.btn-submit {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-cancel,
+.btn-submit {
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-cancel {
+    background-color: #f44336;
+    /* Cor de cancelar (vermelho) */
+    color: white;
+}
+
+.btn-submit {
+    background-color: #4caf50;
+    /* Cor de salvar (verde) */
+    color: white;
+}
+
+.btn-cancel:hover,
+.btn-submit:hover {
+    opacity: 0.9;
+}
+
+.day-buttons button {
+    margin: 5px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.day-buttons button.selected {
+    background-color: #007BFF;
+    color: white;
+}
+
+/* Container do Calendário */
+.calendar-container {
+    margin-bottom: 20px;
+}
+
+/* Botões de Ação */
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+button {
+    padding: 10px;
+    margin: 5px;
+}
+
+button.selected {
+    background-color: #007BFF;
+    color: white;
+}
+
+button:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}

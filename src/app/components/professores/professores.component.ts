@@ -32,8 +32,6 @@ export class ProfessoresComponent {
   async getProfessores() {
     try {
       this.currentState = GlobalState.LOADING;
-
-
       const data = await firstValueFrom(this.http.get<IProfessor[]>('http://localhost:5093/api/v1/professor', {
         params: {
           Search: '',
@@ -42,8 +40,6 @@ export class ProfessoresComponent {
           PageSize: 50
         }
       }));
-      console.log(data);
-
 
       this.listaProfessores = {
         success: true,

@@ -1,16 +1,34 @@
 <div class="calendar-container">
     <div class="calendar-view">
-        <full-calendar [options]="calendarOptions"></full-calendar>
-    </div>
-    <div class="events-sidebar">
-        <h3>Eventos do dia</h3>
-        <div class="selected-date">{{ selectedDate | date:'fullDate':'':'pt' }}</div>
 
-        <div *ngIf="dailyEvents.length === 0" class="no-events">
+        <full-calendar [options]="calendarOptions"></full-calendar>
+
+    </div>
+
+    <div class="events-sidebar">
+
+        <!-- Botão "Criar nova atribuição de aula" -->
+        <div *ngIf="currentState === 'IDLE'" class="create-assignment-btn">
+            <button (click)="irParaAtribuicaoDeSala()" class="btn-create">
+                Criar nova atribuição de aula
+            </button>
+        </div>
+        <h3>Aulas do dia</h3>
+        <div class="selected-date">{{ selectedDate }}</div>
+
+        <!-- LOADING -->
+        <div *ngIf="currentState === 'LOADING'" class="loading-spinner">
+            <p>Carregando atribuições...</p>
+        </div>
+
+        <!-- SEM EVENTOS -->
+        <div *ngIf="currentState === 'IDLE' && dailyEvents.length === 0" class="no-events">
             Nenhum evento agendado para este dia
         </div>
 
-        <ul class="events-list">
+
+        <!-- LISTA DE EVENTOS -->
+        <ul class="events-list" *ngIf="currentState === 'IDLE' && dailyEvents.length > 0">
             <li *ngFor="let event of dailyEvents" [style.borderLeft]="'4px solid ' + event.color">
                 <div class="event-header">
                     <span class="event-time">
