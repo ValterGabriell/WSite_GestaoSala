@@ -216,6 +216,35 @@ export class AtribuicoesAddComponent implements OnInit {
     }
   }
 
+  async getDisciplinas() {
+    try {
+      this.currentState = GlobalState.LOADING;
+      const data = await firstValueFrom(this.http.get<IProfessor[]>('http://localhost:5093/api/v1/professor', {
+        params: {
+          Search: '',
+          IsActive: true,
+          PageNumber: 1,
+          PageSize: 50
+        }
+      }));
+
+      this.listaProfessores = {
+        success: true,
+        message: 'Professores carregados com sucesso',
+        data: data,
+      }
+    } catch (error) {
+      this.listaProfessores = {
+        success: false,
+        message: 'Erro ao carregar professores',
+        data: [],
+        error: (error as Error).message,
+      };
+    } finally {
+      this.currentState = GlobalState.IDLE;
+    }
+  }
+
 
   formatDate(date: Date): string {
     return date.toISOString().split('T')[0]; // Formato 'YYYY-MM-DD'
@@ -266,7 +295,7 @@ export class AtribuicoesAddComponent implements OnInit {
       salaId: new FormControl(this.salas.length ? this.salas[0].id : null),
       disciplinaId: new FormControl(this.disciplinas.length ? this.disciplinas[0].id : null),
       turmaId: new FormControl(this.turmas.length ? this.turmas[0].id : null),
-      selectedDays: new FormControl([]),  // Selecione os dias conforme necessário
+      selectedDays: new FormControl([]),
       startTime: new FormControl(''),
       endTime: new FormControl('')
     });
