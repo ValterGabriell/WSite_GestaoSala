@@ -8,7 +8,7 @@ import listPlugin from '@fullcalendar/list';
 import multiMonthPlugin from '@fullcalendar/multimonth';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import ptBrLocale from '@fullcalendar/core/locales/pt-br';
-import { converterParaEventos, IAtribuicoes } from './mockData';
+import { converterParaEventos, IAtribuicoes } from './AtribuicaoHelper';
 import { GlobalState } from '../../util/GlobalState';
 import { firstValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';

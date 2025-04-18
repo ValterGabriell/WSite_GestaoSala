@@ -52,6 +52,16 @@ interface TblSala {
     name: string;
 }
 
+export interface IPostAtribuicao {
+    userId: number;
+    salaId: number;
+    disciplinaId: number;
+    turmaID: string;
+    diaDeAulaDaSemana: string;
+    horaInicial: number;
+    horaFinal: number;
+}
+
 
 export function converterParaEventos(atribuicoes: IAtribuicoes[]): EventSourceInput {
 

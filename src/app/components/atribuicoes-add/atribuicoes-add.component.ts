@@ -10,7 +10,7 @@ import listPlugin from '@fullcalendar/list';
 import multiMonthPlugin from '@fullcalendar/multimonth';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { GlobalState } from '../../util/GlobalState';
-import { converterParaEventos, IAtribuicoes } from '../atribuicoes/mockData';
+import { converterParaEventos, IAtribuicoes, IPostAtribuicao } from '../atribuicoes/AtribuicaoHelper';
 import { firstValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ViewChild } from '@angular/core';
@@ -37,9 +37,11 @@ export class AtribuicoesAddComponent implements OnInit {
   professors = [
     { id: 1, label: 'Professor A' },
     { id: 2, label: 'Professor B' },
+    { id: 18, label: 'valter' },
     { id: 3, label: 'Professor C' }
   ];
   salas = [
+    { id: 12, label: 'Sala Valter' },
     { id: 1, label: 'Sala 101' },
     { id: 2, label: 'Sala 102' },
     { id: 3, label: 'Sala 103' }
@@ -47,11 +49,13 @@ export class AtribuicoesAddComponent implements OnInit {
   disciplinas = [
     { id: 1, label: 'Matemática' },
     { id: 2, label: 'História' },
-    { id: 3, label: 'Geografia' }
+    { id: 3, label: 'Geografia' },
+    { id: 4, label: 'FILOSOFIA DAS CIENCIAS' }
   ];
   turmas = [
     { id: 1, label: 'Turma A' },
     { id: 2, label: 'Turma B' },
+    { id: '00000000-0000-0000-0000-000000000000', label: 'EC 2019,4' },
     { id: 3, label: 'Turma C' }
   ];
 
@@ -128,10 +132,9 @@ export class AtribuicoesAddComponent implements OnInit {
         return;
       }
     }
-    // Atualiza o calendário
+
     this.calendar.getApi().render();
 
-    // Opcional: ordena as datas
     this.diasSelecionadosParaAtribuicao.sort();
   }
 
@@ -141,12 +144,12 @@ export class AtribuicoesAddComponent implements OnInit {
     this.calendar.getApi().render();
   }
 
-  // Verificar se uma data está selecionada
+
   isDateSelected(date: Date): boolean {
     return this.diasSelecionadosParaAtribuicao.includes(this.formatDate(date));
   }
 
-  // Obter datas selecionadas como objetos Date
+
   getSelectedDates(): Date[] {
     return this.diasSelecionadosParaAtribuicao.map(dateStr => new Date(dateStr));
   }
@@ -186,11 +189,41 @@ export class AtribuicoesAddComponent implements OnInit {
   }
 
   submitForm() {
+    this.currentState = GlobalState.LOADING;
     const formData = {
       ...this.atribuirAulaForm.value,
       diasSelecionados: this.diasSelecionadosParaAtribuicao
     };
-    console.log('Dados do formulário:', formData);
+
+
+    //@ts-ignore
+    formData.diasSelecionados.forEach((dia) => {
+      const atribuirAula: IPostAtribuicao = {
+        userId: formData.professorId,
+        salaId: formData.salaId,
+        disciplinaId: formData.disciplinaId,
+        turmaID: formData.turmaId,
+        diaDeAulaDaSemana: dia,
+        horaInicial: formData.startTime,
+        horaFinal: formData.endTime
+      };
+      console.log('Dados do formulário:', atribuirAula);
+      this.http.post<IPostAtribuicao>('http://localhost:5093/api/v1/atribuicoes', atribuirAula).subscribe(() => {
+        this.currentState = GlobalState.IDLE;
+      });
+    })
+
+    // // const atribuirAula: IPostAtribuicao = {
+    // //   userId: this.atribuirAulaForm.value.professorId,
+    // //   salaId: this.atribuirAulaForm.value.salaId,
+    // //   disciplinaId: this.atribuirAulaForm.value.disciplinaId;
+    // //   turmaID: this.atribuirAulaForm.value.turmaId,
+    // //   diaDeAulaDaSemana: ;
+    // //   horaInicial: number;
+    // //   horaFinal: number;
+    // // }
+
+
   }
 
   async ngOnInit() {
