@@ -14,6 +14,8 @@ import { converterParaEventos, IAtribuicoes, IPostAtribuicao } from '../atribuic
 import { firstValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ViewChild } from '@angular/core';
+import { GlobalResponse } from '../../util/IGlobalResponse';
+import { IProfessor } from '../professores/professores.component';
 
 @Component({
   selector: 'app-atribuicoes-add',
@@ -29,6 +31,8 @@ export class AtribuicoesAddComponent implements OnInit {
   diasSelecionadosParaAtribuicao: string[] = [];
   name = new FormControl('');
   eventosCache: any;
+  listaProfessores: GlobalResponse<IProfessor[]> = {} as GlobalResponse<IProfessor[]>;
+
   //@ts-ignore
   atribuirAulaForm: FormGroup;
   currentState = GlobalState.IDLE;
@@ -178,6 +182,35 @@ export class AtribuicoesAddComponent implements OnInit {
     } catch (error) {
 
       this.currentState = GlobalState.ERROR;
+    } finally {
+      this.currentState = GlobalState.IDLE;
+    }
+  }
+
+  async getProfessores() {
+    try {
+      this.currentState = GlobalState.LOADING;
+      const data = await firstValueFrom(this.http.get<IProfessor[]>('http://localhost:5093/api/v1/professor', {
+        params: {
+          Search: '',
+          IsActive: true,
+          PageNumber: 1,
+          PageSize: 50
+        }
+      }));
+
+      this.listaProfessores = {
+        success: true,
+        message: 'Professores carregados com sucesso',
+        data: data,
+      }
+    } catch (error) {
+      this.listaProfessores = {
+        success: false,
+        message: 'Erro ao carregar professores',
+        data: [],
+        error: (error as Error).message,
+      };
     } finally {
       this.currentState = GlobalState.IDLE;
     }

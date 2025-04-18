@@ -4,7 +4,7 @@ import { GlobalState } from '../../util/GlobalState';
 import { firstValueFrom } from 'rxjs';
 import { GlobalResponse } from '../../util/IGlobalResponse';
 
-interface IProfessor {
+export interface IProfessor {
   id: number;
   isActive: boolean;
   creationDate: string;
