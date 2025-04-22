@@ -75,7 +75,7 @@ export function converterParaEventos(atribuicoes: IAtribuicoes[]): EventSourceIn
 
             return {
                 id: `sala-${sala.salaId}-${dia.dia}`,
-                title: `${sala.disciplina.sigla} - ${sala.disciplina.nome} - ${sala.turma.nome}`,
+                title: `${sala.disciplina.sigla}`,
                 start: start,
                 end: end,
                 color: sala.professor.color,

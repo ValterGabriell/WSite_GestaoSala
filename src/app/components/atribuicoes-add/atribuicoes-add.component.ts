@@ -17,6 +17,12 @@ import { ViewChild } from '@angular/core';
 import { GlobalResponse } from '../../util/IGlobalResponse';
 import { IProfessor } from '../professores/professores.component';
 
+
+interface ICombo {
+  id: string | number,
+  label: string
+}
+
 @Component({
   selector: 'app-atribuicoes-add',
   imports: [ReactiveFormsModule, CalendarModule, CommonModule, FullCalendarModule],
@@ -31,37 +37,18 @@ export class AtribuicoesAddComponent implements OnInit {
   diasSelecionadosParaAtribuicao: string[] = [];
   name = new FormControl('');
   eventosCache: any;
-  listaProfessores: GlobalResponse<IProfessor[]> = {} as GlobalResponse<IProfessor[]>;
+
+  comboDisciplina: ICombo[] = {} as ICombo[];
+  comboProfessores: ICombo[] = {} as ICombo[];
+  comboTurma: ICombo[] = {} as ICombo[];
+  comboSala: ICombo[] = {} as ICombo[];
 
   //@ts-ignore
   atribuirAulaForm: FormGroup;
   currentState = GlobalState.IDLE;
   atribuicoes: IAtribuicoes[] = [];
 
-  professors = [
-    { id: 1, label: 'Professor A' },
-    { id: 2, label: 'Professor B' },
-    { id: 18, label: 'valter' },
-    { id: 3, label: 'Professor C' }
-  ];
-  salas = [
-    { id: 12, label: 'Sala Valter' },
-    { id: 1, label: 'Sala 101' },
-    { id: 2, label: 'Sala 102' },
-    { id: 3, label: 'Sala 103' }
-  ];
-  disciplinas = [
-    { id: 1, label: 'Matemática' },
-    { id: 2, label: 'História' },
-    { id: 3, label: 'Geografia' },
-    { id: 4, label: 'FILOSOFIA DAS CIENCIAS' }
-  ];
-  turmas = [
-    { id: 1, label: 'Turma A' },
-    { id: 2, label: 'Turma B' },
-    { id: '00000000-0000-0000-0000-000000000000', label: 'EC 2019,4' },
-    { id: 3, label: 'Turma C' }
-  ];
+
 
   daysOfWeek = [
     { id: 1, label: 'Segunda-feira' },
@@ -187,30 +174,14 @@ export class AtribuicoesAddComponent implements OnInit {
     }
   }
 
+  //combos
   async getProfessores() {
     try {
       this.currentState = GlobalState.LOADING;
-      const data = await firstValueFrom(this.http.get<IProfessor[]>('http://localhost:5093/api/v1/professor', {
-        params: {
-          Search: '',
-          IsActive: true,
-          PageNumber: 1,
-          PageSize: 50
-        }
-      }));
-
-      this.listaProfessores = {
-        success: true,
-        message: 'Professores carregados com sucesso',
-        data: data,
-      }
+      const data = await firstValueFrom(this.http.get<ICombo[]>('http://localhost:5093/api/v1/professor/combo'));
+      this.comboProfessores = data;
     } catch (error) {
-      this.listaProfessores = {
-        success: false,
-        message: 'Erro ao carregar professores',
-        data: [],
-        error: (error as Error).message,
-      };
+      this.currentState = GlobalState.ERROR;
     } finally {
       this.currentState = GlobalState.IDLE;
     }
@@ -219,27 +190,35 @@ export class AtribuicoesAddComponent implements OnInit {
   async getDisciplinas() {
     try {
       this.currentState = GlobalState.LOADING;
-      const data = await firstValueFrom(this.http.get<IProfessor[]>('http://localhost:5093/api/v1/professor', {
-        params: {
-          Search: '',
-          IsActive: true,
-          PageNumber: 1,
-          PageSize: 50
-        }
-      }));
-
-      this.listaProfessores = {
-        success: true,
-        message: 'Professores carregados com sucesso',
-        data: data,
-      }
+      const data = await firstValueFrom(this.http.get<ICombo[]>('http://localhost:5093/api/v1/disciplina/combo'));
+      this.comboDisciplina = data;
     } catch (error) {
-      this.listaProfessores = {
-        success: false,
-        message: 'Erro ao carregar professores',
-        data: [],
-        error: (error as Error).message,
-      };
+      this.currentState = GlobalState.ERROR;
+    } finally {
+      this.currentState = GlobalState.IDLE;
+    }
+  }
+
+  async getTurmas() {
+    try {
+      this.currentState = GlobalState.LOADING;
+      const data = await firstValueFrom(this.http.get<ICombo[]>('http://localhost:5093/api/v1/turma/combo'));
+      this.comboTurma = data;
+    } catch (error) {
+      this.currentState = GlobalState.ERROR;
+    } finally {
+      this.currentState = GlobalState.IDLE;
+    }
+  }
+
+
+  async getSalas() {
+    try {
+      this.currentState = GlobalState.LOADING;
+      const data = await firstValueFrom(this.http.get<ICombo[]>('http://localhost:5093/api/v1/sala/combo'));
+      this.comboSala = data;
+    } catch (error) {
+      this.currentState = GlobalState.ERROR;
     } finally {
       this.currentState = GlobalState.IDLE;
     }
@@ -290,11 +269,15 @@ export class AtribuicoesAddComponent implements OnInit {
 
   async ngOnInit() {
     await this.getAtribuições();
+    await this.getDisciplinas();
+    await this.getProfessores();
+    await this.getSalas();
+    await this.getTurmas();
     this.atribuirAulaForm = new FormGroup({
-      professorId: new FormControl(this.professors.length ? this.professors[0].id : null),
-      salaId: new FormControl(this.salas.length ? this.salas[0].id : null),
-      disciplinaId: new FormControl(this.disciplinas.length ? this.disciplinas[0].id : null),
-      turmaId: new FormControl(this.turmas.length ? this.turmas[0].id : null),
+      professorId: new FormControl(this.comboProfessores.length ? this.comboProfessores[0].id : null),
+      salaId: new FormControl(this.comboSala.length ? this.comboSala[0].id : null),
+      disciplinaId: new FormControl(this.comboDisciplina.length ? this.comboDisciplina[0].id : null),
+      turmaId: new FormControl(this.comboTurma.length ? this.comboTurma[0].id : null),
       selectedDays: new FormControl([]),
       startTime: new FormControl(''),
       endTime: new FormControl('')

@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CalendarOptions, EventApi, EventSourceInput } from '@fullcalendar/core';
+import { CalendarOptions, DayCellContentArg, EventApi, EventSourceInput } from '@fullcalendar/core';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -24,7 +24,7 @@ export class AtribuicoesComponent implements OnInit {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  selectedDate: string = '';
+  selectedDate: Date | null = null;
   dailyEvents: any[] = [];
   currentState = GlobalState.IDLE;
   atribuicoes: IAtribuicoes[] = [];
@@ -33,11 +33,12 @@ export class AtribuicoesComponent implements OnInit {
 
   // Inicializa com um array vazio
   calendarOptions: CalendarOptions = {
+    timeZone: 'America/Sao_Paulo',
     initialView: 'dayGridMonth',
     headerToolbar: {
       left: 'prev,next',
       center: 'title',
-      right: 'multiMonthYear,dayGridMonth,timeGridWeek,timeGridDay'
+      right: 'multiMonthYear,dayGridMonth'
     },
     height: '800px',
     plugins: [timeGridPlugin, dayGridPlugin, listPlugin, multiMonthPlugin, interactionPlugin],
@@ -45,12 +46,18 @@ export class AtribuicoesComponent implements OnInit {
     locales: [ptBrLocale],
     locale: 'pt-br',
     events: [],
+    selectable: true,
     dateClick: this.handleDateClick.bind(this),
     eventColor: '#4f46e5',
     eventTextColor: '#ffffff',
     eventBorderColor: '#4338ca',
     dayHeaderClassNames: 'custom-day-header',
-    dayCellClassNames: 'custom-day-cell',
+    dayCellClassNames: (arg: DayCellContentArg) => {
+      if (this.selectedDate && this.isSameDay(arg.date, this.selectedDate)) {
+        return 'custom-day-cell selected-day';
+      }
+      return 'custom-day-cell';
+    },
     buttonText: {
       today: 'Hoje',
       month: 'Mês',
@@ -89,22 +96,22 @@ export class AtribuicoesComponent implements OnInit {
     }
   }
 
-  private isSameDay(date1: Date, date2: Date): boolean {
+  isSameDay(date1: Date, date2: Date): boolean {
     return date1.getFullYear() === date2.getFullYear() &&
       date1.getMonth() === date2.getMonth() &&
       date1.getDate() === date2.getDate();
   }
 
   handleDateClick(clickInfo: DateClickArg) {
-
     const date = clickInfo.date;
+    this.selectedDate = date; // Armazena a data selecionada
+
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     const formattedDate = `${day}/${month}/${year}`;
 
-    this.selectedDate = formattedDate;
-    const events = this.eventosCache as EventApi[]; // Use o cache de eventos aqui
+    const events = this.eventosCache as EventApi[];
 
     this.dailyEvents = events
       .filter(event => this.isSameDay(event.start as Date, clickInfo.date))
@@ -120,6 +127,7 @@ export class AtribuicoesComponent implements OnInit {
         turno: event.extendedProps['turno'],
         professorId: event.extendedProps['professorId']
       }), 0);
+
   }
 
   async ngOnInit() {

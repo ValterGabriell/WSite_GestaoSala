@@ -17,14 +17,14 @@
                 <div class="form-group">
                     <label for="professor">Professor:</label>
                     <select id="professor" formControlName="professorId" class="form-control">
-                        <option *ngFor="let professor of professors" [value]="professor.id">{{ professor.label }}
+                        <option *ngFor="let professor of comboProfessores" [value]="professor.id">{{ professor.label }}
                         </option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="turma">Turma:</label>
                     <select id="turma" formControlName="turmaId" class="form-control">
-                        <option *ngFor="let turma of turmas" [value]="turma.id">{{ turma.label }}</option>
+                        <option *ngFor="let turma of comboTurma" [value]="turma.id">{{ turma.label }}</option>
                     </select>
                 </div>
             </div>
@@ -34,14 +34,15 @@
                 <div class="form-group">
                     <label for="disciplina">Disciplina:</label>
                     <select id="disciplina" formControlName="disciplinaId" class="form-control">
-                        <option *ngFor="let disciplina of disciplinas" [value]="disciplina.id">{{ disciplina.label }}
+                        <option *ngFor="let disciplina of comboDisciplina" [value]="disciplina.id">{{ disciplina.label
+                            }}
                         </option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="sala">Sala:</label>
                     <select id="sala" formControlName="salaId" class="form-control">
-                        <option *ngFor="let sala of salas" [value]="sala.id">{{ sala.label }}</option>
+                        <option *ngFor="let sala of comboSala" [value]="sala.id">{{ sala.label }}</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -68,6 +69,22 @@
         <!-- Calendário à direita -->
         <div class="calendar-container">
             <full-calendar [options]="calendarOptions"></full-calendar>
+            <div class="calendar-instructions">
+                <h3>Como selecionar os dias de aula:</h3>
+                <ol>
+                    <li><strong>Selecione no calendário os dias da semana</strong> em que esta disciplina ocorrerá (ex:
+                        todas as
+                        segundas e quartas)</li>
+                    <li><strong>Inicie pela data de início da disciplina</strong> - o primeiro dia selecionado deve ser
+                        a data
+                        oficial de início</li>
+                    <li><strong>O sistema calculará automaticamente</strong> os demais dias de aula com base na carga
+                        horária total
+                        da disciplina</li>
+                </ol>
+                <p class="note">Observação: Você pode selecionar múltiplos dias, desde que não exceda 7 dias semanais.
+                </p>
+            </div>
         </div>
 
     </div>
