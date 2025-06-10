@@ -4,6 +4,7 @@ import { DisciplinasComponent } from './components/disciplinas/disciplinas.compo
 import { AtribuicoesComponent } from './components/atribuicoes/atribuicoes.component';
 import { SalasComponent } from './components/salas/salas.component';
 import { AtribuicoesAddComponent } from './components/atribuicoes-add/atribuicoes-add.component';
+import { SalaAddComponent } from './sala-add/sala-add.component';
 
 export const routes: Routes = [
     {
@@ -17,6 +18,10 @@ export const routes: Routes = [
     {
         path: "salas",
         component: SalasComponent
+    },
+    {
+        path: "salas-add",
+        component: SalaAddComponent
     },
     {
         path: "disciplinas",

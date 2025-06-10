@@ -1,1 +1,45 @@
-<p>salas works!</p>
+<div class="container">
+    <div class="header-actions">
+        <button class="btn-add" type="button" [routerLink]="['/sala-add']">Adicionar nova sala</button>
+    </div>
+    <h2>Salas</h2>
+    <form class="filtros" (ngSubmit)="buscarSalas()">
+        <input type="text" [(ngModel)]="search" name="search" placeholder="Buscar por nome..." />
+        <button type="submit">Filtrar</button>
+    </form>
+
+    <div *ngIf="loading" class="mensagem">Carregando...</div>
+    <div *ngIf="mensagem && !loading" class="mensagem">{{ mensagem }}</div>
+
+    <table *ngIf="salas.length > 0 && !loading">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Data de Criação</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let sala of salas">
+                <td>{{ sala.id }}</td>
+                <td>
+                    <span *ngIf="editId !== sala.id">{{ sala.name }}</span>
+                    <input *ngIf="editId === sala.id" [(ngModel)]="editName" name="editName{{sala.id}}" />
+                </td>
+                <td>{{ sala.creationDate | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td>
+                    <div class="action-buttons">
+                        <button *ngIf="editId !== sala.id" class="btn-action btn-edit" (click)="editarSala(sala)"
+                            type="button">Editar</button>
+                        <button *ngIf="editId === sala.id" class="btn-action btn-save" (click)="salvarEdicao(sala)"
+                            type="button">Salvar</button>
+                        <button *ngIf="editId === sala.id" class="btn-action btn-cancel" (click)="cancelarEdicao()"
+                            type="button">Cancelar</button>
+                        <button class="btn-action btn-delete" (click)="excluirSala(sala)" type="button">Excluir</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

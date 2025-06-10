@@ -1,0 +1,72 @@
+:host {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    background: #f4f8fb;
+}
+
+.form-container {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 60, 120, 0.08);
+    padding: 32px 40px;
+    min-width: 320px;
+    max-width: 400px;
+}
+
+h2 {
+    color: #1565c0;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+label {
+    color: #1565c0;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 8px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #90caf9;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    background: #f4f8fb;
+    color: #0d47a1;
+    transition: border-color 0.2s;
+}
+
+input:focus {
+    border-color: #1565c0;
+    outline: none;
+}
+
+button[type="submit"] {
+    width: 100%;
+    background: #1565c0;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 0;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+button[type="submit"]:hover {
+    background: #1976d2;
+}
+
+.mensagem {
+    margin-top: 18px;
+    text-align: center;
+    font-weight: 500;
+    color: #1565c0;
+}

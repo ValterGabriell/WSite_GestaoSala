@@ -1,34 +1,81 @@
 <div class="disciplina-list">
-    <h2>Lista de Disciplinas</h2>
+    <div class="disciplina-list-header">
+        <h2>Lista de Disciplinas</h2>
+    </div>
 
-    @if (this.currentState === 'LOADING') {
-    <p>Carregando disciplinas...</p>
+    <input type="text" [(ngModel)]="search" placeholder="Buscar por nome, código ou sigla..." class="search-input" />
+
+    @if (this.currentState === GlobalState.LOADING) {
+    <div class="loading">
+        <span class="spinner"></span>
+        Carregando disciplinas...
+    </div>
     }
 
     @if (!listaDisciplina.success) {
-    <p style="color: red;">
-        {{ listaDisciplina.message }}<br />
-        @if (listaDisciplina.error) {
-        <small>Erro técnico: {{ listaDisciplina.error }}</small>
-        }
-    </p>
+    <div class="error-state">
+        <p>
+            {{ listaDisciplina.message }}<br />
+            @if (listaDisciplina.error) {
+            <small>Erro técnico: {{ listaDisciplina.error }}</small>
+            }
+        </p>
+    </div>
     }
 
-    @if (listaDisciplina.success
-    && listaDisciplina.data !== undefined
-    && listaDisciplina.data!.length === 0) {
-    <p>Nenhum disciplina encontrado.</p>
-    } @else {
-
-    <div class="disciplina-cards-grid">
-        @for (disciplina of listaDisciplina.data; track disciplina.id) {
-        <div class="disciplina-card">
-            <h3>{{ disciplina.nome }} - {{ disciplina.sigla }}</h3>
-            <p><strong>Carga Horária:</strong> {{ disciplina.cargaHoraria }}</p>
-            <p><strong>Código:</strong> {{ disciplina.codigo }}</p>
-            <p><strong>Total Aulas:</strong> {{ disciplina.totalAulas }}</p>
-        </div>
-        }
+    @if (listaDisciplina.success && disciplinasFiltradas.length === 0 && this.currentState !== GlobalState.LOADING) {
+    <div class="empty-state">
+        Nenhuma disciplina encontrada.
     </div>
+    } @else {
+    <ul class="lista-simples">
+        @for (disciplina of disciplinasFiltradas.reverse(); track disciplina.id) {
+        <li>
+            <div class="disciplina-card-horizontal">
+                @if (editDisciplina?.id === disciplina.id) {
+                <form (ngSubmit)="salvarEdicao()" class="disciplina-form-vertical">
+                    <label>
+                        Nome:
+                        <input [(ngModel)]="editDisciplina!.nome" name="nome{{disciplina.id}}" required />
+                    </label>
+                    <label>
+                        Código:
+                        <input [(ngModel)]="editDisciplina!.codigo" name="codigo{{disciplina.id}}" required />
+                    </label>
+                    <label>
+                        Sigla:
+                        <input [(ngModel)]="editDisciplina!.sigla" name="sigla{{disciplina.id}}" required />
+                    </label>
+                    <label>
+                        Carga Horária:
+                        <input type="number" [(ngModel)]="editDisciplina!.cargaHoraria"
+                            name="cargaHoraria{{disciplina.id}}" required />
+                    </label>
+                    <div class="action-buttons">
+                        <button class="btn-action btn-save" type="submit" [disabled]="loadingAction">Salvar</button>
+                        <button class="btn-action btn-cancel" type="button" (click)="cancelarEdicao()"
+                            [disabled]="loadingAction">Cancelar</button>
+                    </div>
+                </form>
+                } @else {
+                <div class="disciplina-info-horizontal">
+                    <span class="disciplina-nome"><strong>{{ disciplina.nome }}</strong></span>
+                    <span class="disciplina-sigla">({{ disciplina.sigla }})</span>
+                    <span class="disciplina-codigo">Cód: {{ disciplina.codigo }}</span>
+                    <span class="disciplina-carga">CH: {{ disciplina.cargaHoraria }}</span>
+                    <span class="disciplina-total">Aulas: {{ disciplina.totalAulas }}</span>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn-action btn-edit" type="button" (click)="abrirEdicao(disciplina)"
+                        [disabled]="loadingAction">Editar</button>
+                    <!-- <button class="btn-action btn-delete" type="button" (click)="excluirDisciplina(disciplina)"
+                        [disabled]="loadingAction">Excluir</button> -->
+                </div>
+                }
+            </div>
+        </li>
+        }
+    </ul>
+
     }
 </div>

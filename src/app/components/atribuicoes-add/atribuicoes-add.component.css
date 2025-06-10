@@ -2,21 +2,23 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(21, 101, 192, 0.08);
 }
 
 h2 {
-    color: #333;
+    color: #1565c0;
     text-align: center;
     margin-bottom: 30px;
 }
 
 .form-container {
     flex: 1;
-    /* Ocupa o lado esquerdo */
-    background-color: #f9f9f9;
+    background-color: #f4f8fb;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(21, 101, 192, 0.07);
 }
 
 .form-section {
@@ -26,15 +28,14 @@ h2 {
     margin-bottom: 20px;
 }
 
-/* Adicione ao seu arquivo CSS */
 .day-selected {
-    background-color: #4f46e5 !important;
+    background-color: #1565c0 !important;
     color: white !important;
     border-radius: 4px;
 }
 
 .day-selected:hover {
-    background-color: #4338ca !important;
+    background-color: #1976d2 !important;
 }
 
 .form-group {
@@ -45,26 +46,29 @@ h2 {
     display: block;
     margin-bottom: 5px;
     font-weight: 500;
+    color: #1565c0;
 }
 
 .form-control {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid #90caf9;
     border-radius: 4px;
     font-size: 16px;
+    background: #e3f2fd;
+    color: #0d47a1;
 }
 
 .calendar-instructions {
-    background-color: #f8f9fa;
-    border-left: 4px solid #4f46e5;
+    background-color: #e3f2fd;
+    border-left: 4px solid #1565c0;
     padding: 15px;
     margin-bottom: 20px;
     border-radius: 4px;
 }
 
 .calendar-instructions h3 {
-    color: #4f46e5;
+    color: #1565c0;
     margin-top: 0;
     margin-bottom: 10px;
 }
@@ -80,14 +84,13 @@ h2 {
 
 .calendar-instructions .note {
     font-style: italic;
-    color: #6c757d;
+    color: #1976d2;
     font-size: 0.9em;
 }
 
 .layout-columns {
     display: flex;
     gap: 2rem;
-    /* Espaçamento entre o formulário e o calendário */
     align-items: flex-start;
     margin-top: 1rem;
 }
@@ -99,14 +102,13 @@ h2 {
 .calendar-container {
     margin: 20px 0;
     flex: 1;
-    /* Ocupa o lado direito */
     max-width: 600px;
 }
 
 .selected-days {
     margin-top: 20px;
     padding: 15px;
-    background-color: #e9f7ef;
+    background-color: #e3f2fd;
     border-radius: 4px;
 }
 
@@ -117,10 +119,11 @@ h2 {
 
 .selected-days li {
     padding: 5px 0;
+    color: #1565c0;
 }
 
 .btn-submit {
-    background-color: #4CAF50;
+    background-color: #1565c0;
     color: white;
     padding: 12px 20px;
     border: none;
@@ -129,14 +132,16 @@ h2 {
     font-size: 16px;
     margin-top: 20px;
     width: 100%;
+    font-weight: 600;
+    transition: background 0.2s;
 }
 
 .btn-submit:hover {
-    background-color: #45a049;
+    background-color: #1976d2;
 }
 
 /* Estilo para dias selecionados no calendário */
 .cal-day-selected {
-    background-color: #4CAF50 !important;
+    background-color: #1565c0 !important;
     color: white !important;
 }

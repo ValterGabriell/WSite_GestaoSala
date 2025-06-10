@@ -1,0 +1,9 @@
+<div class="form-container">
+    <h2>Criar Sala</h2>
+    <form (ngSubmit)="criarSala()">
+        <label for="name">Nome da Sala:</label>
+        <input id="name" [(ngModel)]="name" name="name" required type="text" />
+        <button type="submit">Criar</button>
+    </form>
+    <div *ngIf="mensagem" class="mensagem">{{ mensagem }}</div>
+</div>

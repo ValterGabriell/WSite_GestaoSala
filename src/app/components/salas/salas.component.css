@@ -1,0 +1,145 @@
+.container {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 60, 120, 0.08);
+    padding: 32px 40px;
+    margin: 32px auto;
+    max-width: 800px;
+}
+
+h2 {
+    color: #1565c0;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.filtros {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    justify-content: center;
+}
+
+.filtros input,
+.filtros select {
+    padding: 8px 12px;
+    border: 1px solid #90caf9;
+    border-radius: 6px;
+    font-size: 16px;
+    background: #f4f8fb;
+    color: #0d47a1;
+}
+
+.filtros button {
+    background: #1565c0;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.filtros button:hover {
+    background: #1976d2;
+}
+
+.mensagem {
+    margin: 18px 0;
+    text-align: center;
+    font-weight: 500;
+    color: #1565c0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    background: #f4f8fb;
+}
+
+th,
+td {
+    padding: 12px 8px;
+    text-align: left;
+}
+
+th {
+    background: #1565c0;
+    color: #fff;
+}
+
+tr:nth-child(even) {
+    background: #e3f2fd;
+}
+
+.ativa {
+    color: #1565c0;
+    font-weight: bold;
+}
+
+.inativa {
+    color: #b71c1c;
+    font-weight: bold;
+}
+
+.header-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+}
+
+.btn-add {
+    background-color: #1565c0;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 22px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-add:hover {
+    background-color: #1976d2;
+}
+
+.btn-edit {
+    background-color: #1976d2;
+    color: #fff;
+}
+
+.btn-edit:hover {
+    background-color: #1565c0;
+}
+
+.btn-save {
+    background-color: #43a047;
+    color: #fff;
+}
+
+.btn-save:hover {
+    background-color: #388e3c;
+}
+
+.btn-cancel {
+    background-color: #bdbdbd;
+    color: #333;
+}
+
+.btn-cancel:hover {
+    background-color: #757575;
+    color: #fff;
+}
+
+.btn-delete {
+    background-color: #e53935;
+    color: #fff;
+}
+
+.btn-delete:hover {
+    background-color: #b71c1c;
+}
