@@ -1,0 +1,99 @@
+.form-container {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(21, 101, 192, 0.08);
+    padding: 32px 40px;
+    min-width: 320px;
+    max-width: 400px;
+    margin: 40px auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h2 {
+    color: #1565c0;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+label {
+    color: #1565c0;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #90caf9;
+    border-radius: 6px;
+    font-size: 16px;
+    background: #f4f8fb;
+    color: #0d47a1;
+    transition: border-color 0.2s;
+}
+
+.form-control:focus {
+    border-color: #1565c0;
+    outline: none;
+}
+
+.btn-submit {
+    width: 100%;
+    background: #1565c0;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 0;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-submit:hover {
+    background: #1976d2;
+}
+
+.loading {
+    text-align: center;
+    color: #1565c0;
+    font-weight: 500;
+    margin-top: 18px;
+}
+
+.spinner {
+    display: inline-block;
+    width: 1.2em;
+    height: 1.2em;
+    border: 3px solid #90caf9;
+    border-top: 3px solid #1565c0;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-right: 0.7em;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.mensagem-sucesso {
+    color: #1565c0;
+    text-align: center;
+    margin-top: 18px;
+    font-weight: 600;
+}
+
+.mensagem-erro {
+    color: #b71c1c;
+    text-align: center;
+    margin-top: 18px;
+    font-weight: 600;
+}

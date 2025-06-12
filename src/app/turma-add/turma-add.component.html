@@ -1,0 +1,29 @@
+<div class="form-container">
+    <h2>Criar Nova Turma</h2>
+    <form (ngSubmit)="criarTurma()" *ngIf="!isLoading">
+        <div class="form-group">
+            <label for="nome">Nome da Turma</label>
+            <input id="nome" [(ngModel)]="nome" name="nome" required class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="bloco">Bloco</label>
+            <input id="bloco" type="number" [(ngModel)]="bloco" name="bloco" required class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="turno">Turno</label>
+            <select id="turno" [(ngModel)]="turno" name="turno" required class="form-control">
+                <option [ngValue]="EnumTurnoTurma.MATUTINO">Matutino</option>
+                <option [ngValue]="EnumTurnoTurma.VESPERTINO">Vespertino</option>
+                <option [ngValue]="EnumTurnoTurma.NOTURNO">Noturno</option>
+            </select>
+
+        </div>
+        <button type="submit" class="btn-submit">Criar Turma</button>
+    </form>
+
+    <div *ngIf="isLoading" class="loading">
+        <span class="spinner"></span> Salvando turma...
+    </div>
+    <div *ngIf="mensagem" class="mensagem-sucesso">{{ mensagem }}</div>
+    <div *ngIf="mensagemErro" class="mensagem-erro">{{ mensagemErro }}</div>
+</div>

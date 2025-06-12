@@ -1,0 +1,53 @@
+<div class="turma-list">
+    <h2>Turmas</h2>
+    <input type="text" [(ngModel)]="search" placeholder="Buscar por nome, bloco ou turno..." class="search-input" />
+
+    <div *ngIf="isLoading" class="loading">
+        <span class="spinner"></span> Carregando turmas...
+    </div>
+    <div *ngIf="mensagem" class="mensagem-sucesso">{{ mensagem }}</div>
+    <div *ngIf="mensagemErro" class="mensagem-erro">{{ mensagemErro }}</div>
+    <div *ngIf="!isLoading && turmasFiltradas.length === 0" class="empty">
+        Nenhuma turma encontrada.
+    </div>
+
+    <ul class="lista-simples" *ngIf="!isLoading && turmasFiltradas.length > 0">
+        <li *ngFor="let turma of turmasFiltradas">
+            <div class="turma-card">
+                <form *ngIf="editTurma?.id === turma.id" (ngSubmit)="salvarEdicao()" class="turma-form-vertical">
+                    <label>
+                        Nome:
+                        <input [(ngModel)]="editTurma!.nome" name="nome{{turma.id}}" required />
+                    </label>
+                    <label>
+                        Bloco:
+                        <input type="number" [(ngModel)]="editTurma!.bloco" name="bloco{{turma.id}}" required />
+                    </label>
+                    <label>
+                        Turno:
+                        <select [(ngModel)]="editTurma!.turno" name="turno{{turma.id}}" required>
+                            <option *ngFor="let t of EnumTurnoTurma" [ngValue]="t.value">{{ t.label }}</option>
+
+                        </select>
+                    </label>
+                    <div class="action-buttons">
+                        <button class="btn-action btn-save" type="submit" [disabled]="loadingAction">Salvar</button>
+                        <button class="btn-action btn-cancel" type="button" (click)="cancelarEdicao()"
+                            [disabled]="loadingAction">Cancelar</button>
+                    </div>
+                </form>
+                <div *ngIf="editTurma?.id !== turma.id" class="turma-info-horizontal">
+                    <span class="turma-nome"><strong>{{ turma.nome }}</strong></span>
+                    <span class="turma-bloco">Bloco: {{ turma.bloco }}</span>
+                    <span class="turma-turno">Turno: {{ getTurnoLabel(turma.turno) }}</span>
+                    <div class="action-buttons">
+                        <button class="btn-action btn-edit" type="button" (click)="abrirEdicao(turma)"
+                            [disabled]="loadingAction">Editar</button>
+                        <button class="btn-action btn-delete" type="button" (click)="excluirTurma(turma)"
+                            [disabled]="loadingAction">Excluir</button>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
