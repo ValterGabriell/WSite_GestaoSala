@@ -2,11 +2,11 @@
     <h2>Lista de Professores</h2>
 
     @if (this.currentState === 'LOADING') {
-    <p>Carregando professores...</p>
+    <p class="loading">Carregando professores...</p>
     }
 
     @if (!listaProfessores.success) {
-    <p style="color: red;">
+    <p class="mensagem-erro">
         {{ listaProfessores.message }}<br />
         @if (listaProfessores.error) {
         <small>Erro técnico: {{ listaProfessores.error }}</small>
@@ -17,20 +17,28 @@
     @if (listaProfessores.success
     && listaProfessores.data !== undefined
     && listaProfessores.data!.length === 0) {
-    <p>Nenhum professor encontrado.</p>
+    <p class="empty-state">Nenhum professor encontrado.</p>
     } @else {
-
-    <div class="user-cards-grid">
+    <ul class="lista-simples">
         @for (professor of listaProfessores.data; track professor.id) {
-        <div class="user-card" [style.borderColor]="professor.color">
-            <h3 [style.color]="professor.color">{{ professor.name }}</h3>
-            <p><strong>Username:</strong> {{ professor.username }}</p>
-            <p><strong>Email:</strong> {{ professor.email }}</p>
-            <p><strong>Telefone:</strong> {{ professor.mobilePhone }}</p>
-            <p><strong>Ativo:</strong> {{ professor.isActive ? 'Sim' : 'Não' }}</p>
-            <p><strong>Último Login:</strong> {{ professor.lastLogin }}</p>
-        </div>
+        <li>
+            <div class="user-card-horizontal" [style.borderColor]="professor.color">
+                <div class="user-info-horizontal">
+                    <span class="prof-nome" [style.color]="professor.color"><strong>{{ professor.name }}</strong></span>
+                    <span><strong>Username:</strong> {{ professor.username }}</span>
+                    <span><strong>Email:</strong> {{ professor.email }}</span>
+                    <span><strong>Telefone:</strong> {{ professor.mobilePhone }}</span>
+                    <span><strong>Ativo:</strong> {{ professor.isActive ? 'Sim' : 'Não' }}</span>
+                    <span><strong>Último Login:</strong> {{ professor.lastLogin }}</span>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn-action btn-edit" type="button" (click)="abrirEdicao(professor)">Editar</button>
+                    <button class="btn-action btn-delete" type="button"
+                        (click)="excluirProfessor(professor)">Excluir</button>
+                </div>
+            </div>
+        </li>
         }
-    </div>
+    </ul>
     }
 </div>

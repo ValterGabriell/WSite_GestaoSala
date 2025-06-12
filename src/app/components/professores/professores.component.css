@@ -1,72 +1,120 @@
 .user-list {
-    padding: 2rem;
-    max-width: 1000px;
-    margin: auto;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 2rem 1.5rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .user-list h2 {
-    font-size: 2rem;
+    font-size: 1.7rem;
     text-align: center;
-    margin-bottom: 2rem;
-    color: #333;
-}
-
-.user-cards-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    /* 2 colunas de tamanho igual */
-    gap: 1.5rem;
-    /* Espaçamento entre os cards */
-    margin-top: 2rem;
-}
-
-.user-card {
-    border-left: 6px solid transparent;
-    background-color: #f9f9f9;
-    padding: 1.5rem;
     margin-bottom: 1.5rem;
-    border-radius: 12px;
-    width: 80%;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    color: #1565c0;
 }
 
-.user-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+.lista-simples {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.user-card h3 {
-    margin-top: 0;
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+.lista-simples li {
+    margin-bottom: 0.7rem;
 }
 
-.user-card p {
-    margin: 0.2rem 0;
-    font-size: 0.95rem;
-    color: #444;
+.user-card-horizontal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f4f8fb;
+    border-left: 6px solid #1565c0;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(21, 101, 192, 0.07);
+    padding: 0.8rem 1.2rem;
+    gap: 1.2rem;
+    transition: box-shadow 0.2s;
 }
 
-p strong {
-    color: #111;
+.user-card-horizontal:hover {
+    box-shadow: 0 6px 14px rgba(21, 101, 192, 0.13);
 }
 
-p[style*="color: red"] {
-    font-weight: bold;
-    margin-top: 1rem;
-    text-align: center;
+.user-info-horizontal {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    font-size: 1rem;
+    color: #0d47a1;
 }
 
-small {
-    font-size: 0.85rem;
-    color: #900;
+.prof-nome {
+    min-width: 120px;
+    color: #1565c0;
+    font-weight: 600;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    margin-left: 1.5rem;
+}
+
+.btn-action {
+    padding: 4px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-edit {
+    background-color: #1976d2;
+    color: #fff;
+}
+
+.btn-edit:hover {
+    background-color: #1565c0;
+}
+
+.btn-delete {
+    background-color: #e53935;
+    color: #fff;
+}
+
+.btn-delete:hover {
+    background-color: #b71c1c;
 }
 
 .loading,
 .empty-state {
     text-align: center;
     font-size: 1.1rem;
-    color: #666;
+    color: #1565c0;
+}
+
+.mensagem-erro {
+    color: #b71c1c;
+    text-align: center;
+    margin-top: 18px;
+    font-weight: 600;
+}
+
+@media (max-width: 900px) {
+    .user-info-horizontal {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+    }
+
+    .user-card-horizontal {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.7rem;
+    }
 }
