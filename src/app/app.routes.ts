@@ -7,11 +7,16 @@ import { AtribuicoesAddComponent } from './components/atribuicoes-add/atribuicoe
 import { SalaAddComponent } from './sala-add/sala-add.component';
 import { TurmaAddComponent } from './turma-add/turma-add.component';
 import { TurmasComponent } from './turmas/turmas.component';
+import { ProfessorAddComponent } from './components/professores/professor-add/professor-add.component';
 
 export const routes: Routes = [
     {
         path: "professores",
         component: ProfessoresComponent
+    },
+    {
+        path: "professores-add",
+        component: ProfessorAddComponent
     },
     {
         path: "atribuicoes",

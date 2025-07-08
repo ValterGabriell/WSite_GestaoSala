@@ -1,0 +1,36 @@
+<div class="form-container">
+    <h2>Cadastrar Professor</h2>
+    <form [formGroup]="professorForm" (ngSubmit)="onSubmit()">
+        <label>
+            Nome:
+            <input formControlName="name" type="text" required />
+        </label>
+        <label>
+            Telefone:
+            <input formControlName="mobilePhone" type="text" required />
+        </label>
+        <label>
+            Email:
+            <input formControlName="email" type="email" required />
+        </label>
+        <label>
+            Cor:
+            <input formControlName="color" type="color" />
+        </label>
+        <label>
+            Usuário:
+            <input formControlName="username" type="text" required />
+        </label>
+        <label>
+            Senha:
+            <input formControlName="password" type="password" required />
+        </label>
+        <label>
+            Ativo:
+            <input formControlName="isActive" type="checkbox" />
+        </label>
+        <button type="submit" [disabled]="professorForm.invalid">Cadastrar</button>
+    </form>
+    <div *ngIf="successMessage" class="mensagem-sucesso">{{ successMessage }}</div>
+    <div *ngIf="errorMessage" class="mensagem-erro">{{ errorMessage }}</div>
+</div>
