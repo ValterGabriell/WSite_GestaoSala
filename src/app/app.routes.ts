@@ -11,6 +11,10 @@ import { ProfessorAddComponent } from './components/professores/professor-add/pr
 
 export const routes: Routes = [
     {
+        path: "",
+        component: AtribuicoesComponent
+    },
+    {
         path: "professores",
         component: ProfessoresComponent
     },

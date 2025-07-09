@@ -1,0 +1,38 @@
+.main-header {
+    background: #fff;
+    color: #fff;
+    padding: 16px 0;
+    box-shadow: 0 2px 8px rgba(21, 101, 192, 0.08);
+}
+
+.main-header h1 {
+    margin: 0 0 12px 0;
+    text-align: center;
+    font-size: 2rem;
+    letter-spacing: 1px;
+    color: #1565c0;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+nav a {
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 6px;
+    background: #fff;
+    color: #1565c0;
+    font-weight: 600;
+    text-decoration: none;
+    border: 2px solid #1565c0;
+    transition: background 0.2s, color 0.2s;
+}
+
+nav a:hover,
+nav a.active {
+    background: #1565c0;
+    color: #fff;
+}

@@ -26,18 +26,25 @@ export class ProfessorAddComponent {
             isActive: [true]
         });
     }
-
+    loading = false;
     onSubmit() {
         if (this.professorForm.valid) {
-            this.http.post('http://localhost:5093/api/v1/professor', this.professorForm.value).subscribe({
-                next: () => {
-                    this.successMessage = 'Professor cadastrado com sucesso!';
+            this.loading = true;
+            this.http.post(
+                'http://localhost:5093/api/v1/professor',
+                this.professorForm.value,
+                { responseType: 'text' }
+            ).subscribe({
+                next: (res) => {
+                    this.successMessage = res || 'Professor cadastrado com sucesso!';
                     this.errorMessage = '';
                     this.professorForm.reset({ isActive: true, color: '#000000' });
+                    this.loading = false;
                 },
                 error: () => {
                     this.errorMessage = 'Erro ao cadastrar professor.';
                     this.successMessage = '';
+                    this.loading = false;
                 }
             });
         }

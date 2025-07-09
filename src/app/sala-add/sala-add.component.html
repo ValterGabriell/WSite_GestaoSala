@@ -5,5 +5,7 @@
         <input id="name" [(ngModel)]="name" name="name" required type="text" />
         <button type="submit">Criar</button>
     </form>
-    <div *ngIf="mensagem" class="mensagem">{{ mensagem }}</div>
+
+    <div *ngIf="loading" class="loading-indicator">Enviando dados...</div>
+    <div *ngIf="mensagem">{{ mensagem }}</div>
 </div>

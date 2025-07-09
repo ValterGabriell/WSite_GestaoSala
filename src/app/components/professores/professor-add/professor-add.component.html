@@ -29,7 +29,9 @@
             Ativo:
             <input formControlName="isActive" type="checkbox" />
         </label>
-        <button type="submit" [disabled]="professorForm.invalid">Cadastrar</button>
+        <button type="submit" [disabled]="professorForm.invalid || loading">
+            {{ loading ? 'Cadastrando...' : 'Cadastrar' }}
+        </button>
     </form>
     <div *ngIf="successMessage" class="mensagem-sucesso">{{ successMessage }}</div>
     <div *ngIf="errorMessage" class="mensagem-erro">{{ errorMessage }}</div>

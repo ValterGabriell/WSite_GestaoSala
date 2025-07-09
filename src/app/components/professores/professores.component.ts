@@ -3,8 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { GlobalState } from '../../util/GlobalState';
 import { firstValueFrom } from 'rxjs';
 import { GlobalResponse } from '../../util/IGlobalResponse';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+
+
 
 export interface IProfessor {
   id: number;
@@ -21,13 +26,17 @@ export interface IProfessor {
 @Component({
   selector: 'app-professores',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterModule, ReactiveFormsModule],
   templateUrl: './professores.component.html',
   styleUrl: './professores.component.css'
 })
 @Injectable({ providedIn: 'root' })
 export class ProfessoresComponent {
   private http = inject(HttpClient);
+  editandoId: string | null = null;
+  edicaoForm: FormGroup | null = null;
+
+  constructor(private fb: FormBuilder, /* outros serviços */) { }
 
   currentState = GlobalState.IDLE;
   listaProfessores: GlobalResponse<IProfessor[]> = {} as GlobalResponse<IProfessor[]>;
@@ -65,46 +74,22 @@ export class ProfessoresComponent {
     }
   }
 
+  filtroNome: string = '';
+
+  get listaFiltrada() {
+    if (!this.listaProfessores?.data) return [];
+    if (!this.filtroNome?.trim()) return this.listaProfessores.data;
+    return this.listaProfessores.data.filter((prof: any) =>
+      prof.name.toLowerCase().includes(this.filtroNome.toLowerCase())
+    );
+  }
+
   ngOnInit() {
     this.getProfessores();
   }
 
-  abrirEdicao(professor: IProfessor) {
-    this.editProfessor = { ...professor };
-    this.mensagem = '';
-    this.mensagemErro = '';
-  }
 
-  cancelarEdicao() {
-    this.editProfessor = null;
-  }
 
-  async salvarEdicao() {
-    if (!this.editProfessor) return;
-    this.loadingAction = true;
-    this.mensagem = '';
-    this.mensagemErro = '';
-    const dto = {
-      name: this.editProfessor.name,
-      mobilePhone: this.editProfessor.mobilePhone,
-      email: this.editProfessor.email,
-      color: this.editProfessor.color,
-      username: this.editProfessor.username,
-      isActive: this.editProfessor.isActive
-    };
-    try {
-      await firstValueFrom(
-        this.http.put(`http://localhost:5093/api/v1/professor/${this.editProfessor.id}`, dto, { responseType: 'text' })
-      );
-      this.mensagem = 'Professor atualizado com sucesso!';
-      this.editProfessor = null;
-      await this.getProfessores();
-    } catch (err: any) {
-      this.mensagemErro = err?.error || err?.message || 'Erro ao editar professor.';
-    } finally {
-      this.loadingAction = false;
-    }
-  }
 
   async excluirProfessor(professor: IProfessor) {
     if (!confirm(`Tem certeza que deseja excluir o professor "${professor.name}"?`)) return;
