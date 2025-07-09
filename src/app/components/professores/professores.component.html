@@ -37,9 +37,23 @@
                     <span><strong>Ativo:</strong> {{ professor.isActive ? 'Sim' : 'Não' }}</span>
                     <span><strong>Último Login:</strong> {{ professor.lastLogin }}</span>
                 </div>
+                <!-- Formulário de edição inline -->
+                <form *ngIf="editandoId === professor.id" [formGroup]="edicaoForm" (ngSubmit)="salvarEdicao(professor)">
+                    <input formControlName="name" placeholder="Nome" />
+                    <input formControlName="username" placeholder="Username" />
+                    <input formControlName="email" placeholder="Email" />
+                    <input formControlName="mobilePhone" placeholder="Telefone" />
+                    <label>
+                        <input type="checkbox" formControlName="isActive" /> Ativo
+                    </label>
+                    <button type="submit" [disabled]="edicaoForm.invalid || loadingAction">Salvar</button>
+                    <button type="button" (click)="cancelarEdicao()">Cancelar</button>
+                </form>
                 <div class="action-buttons">
                     <button class="btn-action btn-delete" type="button"
                         (click)="excluirProfessor(professor)">Excluir</button>
+                    <button class="btn-action btn-edit" type="button" (click)="abrirEdicao(professor)"
+                        [disabled]="loadingAction">Editar</button>
                 </div>
             </div>
         </li>

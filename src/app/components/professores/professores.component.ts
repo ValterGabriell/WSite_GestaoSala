@@ -33,10 +33,10 @@ export interface IProfessor {
 @Injectable({ providedIn: 'root' })
 export class ProfessoresComponent {
   private http = inject(HttpClient);
-  editandoId: string | null = null;
-  edicaoForm: FormGroup | null = null;
+  private fb = inject(FormBuilder);
 
-  constructor(private fb: FormBuilder, /* outros serviços */) { }
+
+
 
   currentState = GlobalState.IDLE;
   listaProfessores: GlobalResponse<IProfessor[]> = {} as GlobalResponse<IProfessor[]>;
@@ -71,6 +71,56 @@ export class ProfessoresComponent {
       };
     } finally {
       this.currentState = GlobalState.IDLE;
+    }
+  }
+
+
+  editandoId: number | null = null;
+  edicaoForm: FormGroup = this.fb.group({
+    name: ['', Validators.required],
+    username: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    mobilePhone: [''],
+    isActive: [true]
+  });
+
+  abrirEdicao(prof: IProfessor) {
+    this.editandoId = prof.id;
+    this.edicaoForm.setValue({
+      name: prof.name,
+      username: prof.username,
+      email: prof.email,
+      mobilePhone: prof.mobilePhone,
+      isActive: prof.isActive
+    });
+  }
+
+  cancelarEdicao() {
+    this.editandoId = null;
+    this.edicaoForm.reset();
+  }
+
+  async salvarEdicao(prof: IProfessor) {
+    if (this.edicaoForm.invalid) return;
+    this.loadingAction = true;
+    try {
+      const body = {
+        ...this.edicaoForm.value
+      };
+
+      console.log(body);
+
+
+      await firstValueFrom(
+        this.http.put(`http://localhost:5093/api/v1/professor/${prof.id}`, body, { responseType: 'text' })
+      );
+      this.mensagem = 'Professor atualizado com sucesso!';
+      this.editandoId = null;
+      await this.getProfessores();
+    } catch (err: any) {
+      this.mensagemErro = err?.error || err?.message || 'Erro ao atualizar professor.';
+    } finally {
+      this.loadingAction = false;
     }
   }
 

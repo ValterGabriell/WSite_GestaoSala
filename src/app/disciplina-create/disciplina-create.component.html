@@ -1,0 +1,25 @@
+<div class="form-container">
+    <h2>Cadastrar Disciplina</h2>
+    <form [formGroup]="disciplinaForm" (ngSubmit)="onSubmit()">
+        <label>
+            Nome:
+            <input formControlName="nome" type="text" required />
+        </label>
+        <label>
+            Código:
+            <input formControlName="codigo" type="text" required />
+        </label>
+        <label>
+            Sigla:
+            <input formControlName="sigla" type="text" required />
+        </label>
+        <label>
+            Carga Horária:
+            <input formControlName="cargaHoraria" type="number" min="1" required />
+        </label>
+        <button type="submit" [disabled]="disciplinaForm.invalid || loading">
+            {{ loading ? 'Cadastrando...' : 'Cadastrar' }}
+        </button>
+    </form>
+    <div *ngIf="mensagem" class="mensagem">{{ mensagem }}</div>
+</div>

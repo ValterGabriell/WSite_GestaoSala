@@ -4,6 +4,7 @@ import { GlobalResponse } from '../../util/IGlobalResponse';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 interface IDisciplina {
   id: number;
@@ -16,7 +17,7 @@ interface IDisciplina {
 
 @Component({
   selector: 'app-disciplinas',
-  imports: [FormsModule],
+  imports: [FormsModule, RouterModule],
   templateUrl: './disciplinas.component.html',
   styleUrl: './disciplinas.component.css'
 })
