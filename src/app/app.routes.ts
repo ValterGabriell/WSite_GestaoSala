@@ -10,51 +10,67 @@ import { TurmasComponent } from './turmas/turmas.component';
 import { ProfessorAddComponent } from './components/professores/professor-add/professor-add.component';
 import { DisciplinaAddComponent } from './disciplina-create/disciplina-create.component';
 import { LoginComponent } from './components/login/login.component';
+import { AuthGuard } from './AuthGuard';
 
 export const routes: Routes = [
     {
         path: "",
-        component: AtribuicoesComponent
+        component: AtribuicoesComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: "professores",
-        component: ProfessoresComponent
+        component: ProfessoresComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: "professores-add",
-        component: ProfessorAddComponent
+        component: ProfessorAddComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: "login",
+        component: LoginComponent,
+        data: { title: 'Login' }
     },
     {
         path: "disciplina-create",
-        component: DisciplinaAddComponent
+        component: DisciplinaAddComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: "atribuicoes",
-        component: AtribuicoesComponent
+        component: AtribuicoesComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: "salas",
-        component: SalasComponent
+        component: SalasComponent,
+        canActivate: [AuthGuard]
     },
-    { path: 'login', component: LoginComponent, data: { hideHeader: true } },
     {
         path: "salas-add",
-        component: SalaAddComponent
+        component: SalaAddComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: "turmas-add",
-        component: TurmaAddComponent
+        component: TurmaAddComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: "turmas",
-        component: TurmasComponent
+        component: TurmasComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: "disciplinas",
-        component: DisciplinasComponent
+        component: DisciplinasComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: "atribuicoes-add",
-        component: AtribuicoesAddComponent
+        component: AtribuicoesAddComponent,
+        canActivate: [AuthGuard]
     }
 ];

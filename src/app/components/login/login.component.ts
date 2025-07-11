@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
+import { AuthService } from '../../AuthService';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -19,7 +19,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.loginForm = this.fb.group({
       userName: ['', Validators.required],
@@ -35,6 +36,8 @@ export class LoginComponent {
         this.loginForm.value
       ).subscribe({
         next: (res) => {
+          //@ts-ignore
+          this.authService.setAuth(res);
           // Salve o token no localStorage ou sessionStorage
           localStorage.setItem('token', res.token);
           this.mensagem = '';
