@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { HeaderComponent } from "../../shared/header/header.component";
 
 interface DtoGetSala {
   id: number;
@@ -13,7 +14,7 @@ interface DtoGetSala {
 
 @Component({
   selector: 'app-salas',
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, HeaderComponent],
   templateUrl: './salas.component.html',
   styleUrl: './salas.component.css'
 })

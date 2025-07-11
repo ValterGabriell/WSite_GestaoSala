@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HeaderComponent } from "../../shared/header/header.component";
 
 
 
@@ -26,7 +27,7 @@ export interface IProfessor {
 @Component({
   selector: 'app-professores',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule, ReactiveFormsModule],
+  imports: [FormsModule, CommonModule, RouterModule, ReactiveFormsModule, HeaderComponent],
   templateUrl: './professores.component.html',
   styleUrl: './professores.component.css'
 })

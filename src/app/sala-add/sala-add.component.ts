@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { HeaderComponent } from "../shared/header/header.component";
 
 @Component({
   selector: 'app-sala-add',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, HeaderComponent],
   templateUrl: './sala-add.component.html',
   styleUrl: './sala-add.component.css'
 })

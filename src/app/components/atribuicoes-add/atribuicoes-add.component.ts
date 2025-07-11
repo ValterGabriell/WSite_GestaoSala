@@ -16,6 +16,7 @@ import { HttpClient } from '@angular/common/http';
 import { ViewChild } from '@angular/core';
 import { GlobalResponse } from '../../util/IGlobalResponse';
 import { IProfessor } from '../professores/professores.component';
+import { HeaderComponent } from "../../shared/header/header.component";
 
 
 interface ICombo {
@@ -25,7 +26,7 @@ interface ICombo {
 
 @Component({
   selector: 'app-atribuicoes-add',
-  imports: [ReactiveFormsModule, CalendarModule, CommonModule, FullCalendarModule],
+  imports: [ReactiveFormsModule, CalendarModule, CommonModule, FullCalendarModule, HeaderComponent],
   templateUrl: './atribuicoes-add.component.html',
   styleUrls: ['./atribuicoes-add.component.css']
 })

@@ -9,6 +9,7 @@ import { TurmaAddComponent } from './turma-add/turma-add.component';
 import { TurmasComponent } from './turmas/turmas.component';
 import { ProfessorAddComponent } from './components/professores/professor-add/professor-add.component';
 import { DisciplinaAddComponent } from './disciplina-create/disciplina-create.component';
+import { LoginComponent } from './components/login/login.component';
 
 export const routes: Routes = [
     {
@@ -35,6 +36,7 @@ export const routes: Routes = [
         path: "salas",
         component: SalasComponent
     },
+    { path: 'login', component: LoginComponent, data: { hideHeader: true } },
     {
         path: "salas-add",
         component: SalaAddComponent

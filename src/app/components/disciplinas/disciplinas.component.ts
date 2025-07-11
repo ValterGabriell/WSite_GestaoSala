@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { HeaderComponent } from "../../shared/header/header.component";
 
 interface IDisciplina {
   id: number;
@@ -17,7 +18,7 @@ interface IDisciplina {
 
 @Component({
   selector: 'app-disciplinas',
-  imports: [FormsModule, RouterModule],
+  imports: [FormsModule, RouterModule, HeaderComponent],
   templateUrl: './disciplinas.component.html',
   styleUrl: './disciplinas.component.css'
 })

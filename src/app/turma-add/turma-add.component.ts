@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HeaderComponent } from "../shared/header/header.component";
 
 enum EnumTurnoTurma {
   MATUTINO = 0,
@@ -12,7 +13,7 @@ enum EnumTurnoTurma {
 @Component({
   selector: 'app-turma-add',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, HeaderComponent],
   templateUrl: './turma-add.component.html',
   styleUrl: './turma-add.component.css'
 })

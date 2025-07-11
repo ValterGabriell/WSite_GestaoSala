@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { HeaderComponent } from "../shared/header/header.component";
 
 interface Turma {
   id: string;
@@ -14,7 +15,7 @@ interface Turma {
 @Component({
   selector: 'app-turmas',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule],
+  imports: [FormsModule, CommonModule, RouterModule, HeaderComponent],
   templateUrl: './turmas.component.html',
   styleUrl: './turmas.component.css'
 })

@@ -13,10 +13,11 @@ import { GlobalState } from '../../util/GlobalState';
 import { firstValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { HeaderComponent } from "../../shared/header/header.component";
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FullCalendarModule],
+  imports: [CommonModule, FullCalendarModule, HeaderComponent],
   templateUrl: './atribuicoes.component.html',
   styleUrls: ['./atribuicoes.component.css']
 })

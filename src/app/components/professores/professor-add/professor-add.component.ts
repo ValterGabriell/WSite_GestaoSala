@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { HeaderComponent } from "../../../shared/header/header.component";
 
 @Component({
     selector: 'app-professor-add',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
+    imports: [CommonModule, ReactiveFormsModule, HttpClientModule, HeaderComponent],
     templateUrl: './professor-add.component.html',
     styleUrls: ['./professor-add.component.css']
 })
