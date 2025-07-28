@@ -43,7 +43,16 @@
                     <div><strong>Sala:</strong> {{ event.sala }}</div>
                     <div><strong>Turma:</strong> {{ event.turma }} ({{ event.turno }})</div>
                 </div>
+                <button class="btn-cancel" (click)="removerAtribuicao(event)" style="margin-top: 10px;">
+                    Remover atribuição
+                </button>
             </li>
         </ul>
+    </div>
+    <div *ngIf="currentState === GlobalState.LOADING" class="loading-overlay">
+        <div class="loading-spinner">
+            <span class="spinner"></span>
+            Carregando atribuições...
+        </div>
     </div>
 </div>

@@ -9,11 +9,18 @@ import multiMonthPlugin from '@fullcalendar/multimonth';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import ptBrLocale from '@fullcalendar/core/locales/pt-br';
 import { converterParaEventos, IAtribuicoes } from './AtribuicaoHelper';
-import { GlobalState } from '../../util/GlobalState';
+
 import { firstValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { HeaderComponent } from "../../shared/header/header.component";
+
+export enum GlobalState {
+  LOADING = 'LOADING',
+  IDLE = 'IDLE',
+  ERROR = 'ERROR'
+}
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -21,6 +28,9 @@ import { HeaderComponent } from "../../shared/header/header.component";
   templateUrl: './atribuicoes.component.html',
   styleUrls: ['./atribuicoes.component.css']
 })
+
+
+
 export class AtribuicoesComponent implements OnInit {
   private http = inject(HttpClient);
   private router = inject(Router);
@@ -30,7 +40,7 @@ export class AtribuicoesComponent implements OnInit {
   currentState = GlobalState.IDLE;
   atribuicoes: IAtribuicoes[] = [];
   eventosCache: any;
-
+  GlobalState = GlobalState;
 
   // Inicializa com um array vazio
   calendarOptions: CalendarOptions = {
@@ -98,25 +108,70 @@ export class AtribuicoesComponent implements OnInit {
   }
 
   isSameDay(date1: Date, date2: Date): boolean {
-    return (
-      date1.getFullYear() === date2.getFullYear() &&
-      date1.getMonth() === date2.getMonth() &&
-      date1.getDate() === date2.getDate()
-    );
+    return date1.getFullYear() === date2.getFullYear()
+      && date1.getMonth() === date2.getMonth()
+      && date1.getDate() === date2.getDate();
   }
-  handleDateClick(clickInfo: DateClickArg) {
-    const date = clickInfo.date;
-    this.selectedDate = date; // Armazena a data selecionada
+  async removerAtribuicao(event: any) {
 
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    const formattedDate = `${day}/${month}/${year}`;
+
+    if (!confirm('Tem certeza que deseja remover esta atribuição?')) return;
+    this.currentState = GlobalState.LOADING;
+    try {
+      // Pegue os parâmetros necessários do evento
+      const userId = event.professorId;
+      const salaId = event.salaId || event.sala?.id;
+      const turmaId = event.turmaId || event.turma?.id;
+      // O dia pode estar em event.start ou event.dia
+      const dia = event.dia
+      console.log(event);
+
+      // Monte a URL com query params
+      const url = `http://localhost:5093/api/v1/atribuicoes?userId=${userId}&salaId=${salaId}&turmaId=${turmaId}&dia=${dia}`;
+
+      await firstValueFrom(
+        this.http.delete(url)
+      );
+      window.location.reload();
+      if (this.selectedDate) {
+        this.handleDateClick({ dateStr: this.selectedDate.toISOString().split('T')[0], date: this.selectedDate } as any);
+      }
+    } catch (err) {
+      alert('Erro ao remover atribuição.');
+    } finally {
+      this.currentState = GlobalState.IDLE;
+    }
+  }
+
+  handleDateClick(clickInfo: DateClickArg) {
+    const dateParts = clickInfo.dateStr.split('-');
+    const date = new Date(
+      Number(dateParts[0]), // ano
+      Number(dateParts[1]) - 1, // mês (0-indexed)
+      Number(dateParts[2]), // dia
+      0, 0, 0 // hora, minuto, segundo
+    );
+
+    this.selectedDate = date; // Armazena a data selecionada
 
     const events = this.eventosCache as EventApi[];
 
+
     this.dailyEvents = events
-      .filter(event => this.isSameDay(event.start as Date, clickInfo.date))
+      .filter(event => {
+
+
+
+        const dateParts_Info = clickInfo.dateStr.split('-');
+        const clickInfoDate = new Date(
+          Number(dateParts_Info[0]), // ano
+          Number(dateParts_Info[1]) - 1, // mês (0-indexed)
+          Number(dateParts_Info[2]), // dia
+          0, 0, 0 // hora, minuto, segundo
+        );
+
+        return this.isSameDay(event.start as Date, clickInfoDate);
+      })
       .map(event => ({
         title: event.title,
         start: event.start,
@@ -126,7 +181,10 @@ export class AtribuicoesComponent implements OnInit {
         disciplina: event.extendedProps['disciplina'],
         turma: event.extendedProps['turma'],
         sala: event.extendedProps['sala'],
+        salaId: event.extendedProps['salaId'],
+        turmaId: event.extendedProps['turmaId'],
         turno: event.extendedProps['turno'],
+        dia: event.extendedProps['dia'],
         professorId: event.extendedProps['professorId']
       }), 0);
 
