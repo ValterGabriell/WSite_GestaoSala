@@ -1,7 +1,22 @@
 <app-header></app-header>
 <div class="calendar-container">
     <div class="calendar-view">
-
+        <!-- HEADER DO USUÁRIO -->
+        <div class="user-header"
+            style="background:#e3f2fd; padding:12px 20px; border-radius:8px; margin-bottom:18px; display:flex; align-items:center; gap:24px;">
+            <div style="font-size:1.2em; font-weight:600; color:#1565c0;">
+                {{ usuario?.name || usuario?.username }}
+            </div>
+            <div style="color:#1976d2;">
+                <span style="font-weight:500;">E-mail:</span> {{ usuario?.email }}
+            </div>
+            <div style="color:#1976d2;">
+                <span style="font-weight:500;">Celular:</span> {{ usuario?.mobilePhone }}
+            </div>
+            <div style="color:#1976d2;">
+                <span style="font-weight:500;">Usuário:</span> {{ usuario?.username }}
+            </div>
+        </div>
         <full-calendar [options]="calendarOptions"></full-calendar>
 
     </div>
@@ -36,6 +51,7 @@
                         {{ event.start | date:'HH:mm' }} - {{ event.end | date:'HH:mm' }}
                     </span>
                     <span class="event-color" [style.background]="event.color"></span>
+
                 </div>
                 <div class="event-title">{{ event.title }}</div>
                 <div class="event-details">
@@ -43,12 +59,63 @@
                     <div><strong>Sala:</strong> {{ event.sala }}</div>
                     <div><strong>Turma:</strong> {{ event.turma }} ({{ event.turno }})</div>
                 </div>
+                <button class="btn-add" (click)="abrirEditModal(event)" style="margin-top: 10px;">
+                    Editar atribuição </button>
                 <button class="btn-cancel" (click)="removerAtribuicao(event)" style="margin-top: 10px;">
                     Remover atribuição
                 </button>
             </li>
         </ul>
     </div>
+
+    <!-- Modal de edição de atribuição -->
+    <div class="modal-overlay" *ngIf="showEditModal">
+        <div class="modal-content">
+            <h3>Editar Atribuição</h3>
+            <form [formGroup]="editAtribuicaoForm" (ngSubmit)="salvarEdicaoAtribuicao()">
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>Professor:</label>
+                        <select formControlName="userId" class="form-control">
+                            <option *ngFor="let professor of comboProfessores" [value]="professor.id">{{ professor.label
+                                }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Sala:</label>
+                        <select formControlName="salaId" class="form-control">
+                            <option *ngFor="let sala of comboSala" [value]="sala.id">{{ sala.label }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Turma:</label>
+                        <select formControlName="turmaId" class="form-control">
+                            <option *ngFor="let turma of comboTurma" [value]="turma.id">{{ turma.label }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Hora Inicial:</label>
+                        <input type="number" formControlName="horaInicial" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Hora Final:</label>
+                        <input type="number" formControlName="horaFinal" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Dia:</label>
+                        <input type="date" formControlName="diaCorrente" class="form-control" />
+                    </div>
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn-submit" type="submit"
+                        [disabled]="editAtribuicaoForm.invalid || currentState === GlobalState.LOADING">Salvar</button>
+                    <button class="btn-cancel" type="button" (click)="fecharEditModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div *ngIf="currentState === GlobalState.LOADING" class="loading-overlay">
         <div class="loading-spinner">
             <span class="spinner"></span>

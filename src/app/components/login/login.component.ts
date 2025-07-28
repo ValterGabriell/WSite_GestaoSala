@@ -4,6 +4,25 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../AuthService';
+export class Usuario {
+  id!: number;
+  isActive!: boolean;
+  creationDate!: string;
+  lastLogin!: string | null;
+  color!: string | null;
+  email!: string;
+  isAdmin!: boolean | null;
+  mobilePhone!: string;
+  name!: string;
+  password!: string;
+  username!: string;
+
+  constructor(init?: Partial<Usuario>) {
+    Object.assign(this, init);
+  }
+}
+
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -31,7 +50,7 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       this.loading = true;
-      this.http.post<{ token: string }>(
+      this.http.post<{ token: string, usuario: Usuario }>(
         'http://localhost:5093/api/v1/auth/admin',
         this.loginForm.value
       ).subscribe({
@@ -40,6 +59,7 @@ export class LoginComponent {
           this.authService.setAuth(res);
           // Salve o token no localStorage ou sessionStorage
           localStorage.setItem('token', res.token);
+          localStorage.setItem('usuario', res.usuario ? JSON.stringify(res.usuario) : '');
           this.mensagem = '';
           this.loading = false;
           // Redirecione para a tela principal
@@ -51,5 +71,10 @@ export class LoginComponent {
         }
       });
     }
+  }
+
+  async ngOnInit() {
+    localStorage.setItem('token', '');
+    localStorage.setItem('usuario', '');
   }
 }

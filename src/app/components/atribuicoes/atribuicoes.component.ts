@@ -14,7 +14,12 @@ import { firstValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { HeaderComponent } from "../../shared/header/header.component";
-
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
+interface ICombo {
+  id: string | number,
+  label: string
+}
 export enum GlobalState {
   LOADING = 'LOADING',
   IDLE = 'IDLE',
@@ -24,7 +29,7 @@ export enum GlobalState {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FullCalendarModule, HeaderComponent],
+  imports: [CommonModule, ReactiveFormsModule, FullCalendarModule, HeaderComponent],
   templateUrl: './atribuicoes.component.html',
   styleUrls: ['./atribuicoes.component.css']
 })
@@ -41,6 +46,15 @@ export class AtribuicoesComponent implements OnInit {
   atribuicoes: IAtribuicoes[] = [];
   eventosCache: any;
   GlobalState = GlobalState;
+  usuario: any = null;
+  showEditModal = false;
+  editAtribuicaoForm!: FormGroup;
+  editAtribuicaoContext: any = null;
+  comboDisciplina: ICombo[] = {} as ICombo[];
+  comboProfessores: ICombo[] = {} as ICombo[];
+  comboTurma: ICombo[] = {} as ICombo[];
+  comboSala: ICombo[] = {} as ICombo[];
+
 
   // Inicializa com um array vazio
   calendarOptions: CalendarOptions = {
@@ -89,6 +103,100 @@ export class AtribuicoesComponent implements OnInit {
     this.router.navigate(['/atribuicoes-add']);
   }
 
+  abrirEditModal(event: any) {
+    this.editAtribuicaoContext = event;
+    this.editAtribuicaoForm = new FormBuilder().group({
+      userId: [event.professorId, Validators.required],
+      salaId: [event.salaId, Validators.required],
+      turmaId: [event.turmaId, Validators.required],
+      horaInicial: [event.start ? new Date(event.start).getHours() : '', Validators.required],
+      horaFinal: [event.end ? new Date(event.end).getHours() : '', Validators.required],
+      diaCorrente: [event.dia || (event.start ? event.start.toISOString().split('T')[0] : ''), Validators.required]
+    });
+    this.showEditModal = true;
+  }
+
+  fecharEditModal() {
+    this.showEditModal = false;
+    this.editAtribuicaoContext = null;
+  }
+
+  //combos
+  async getProfessores() {
+    try {
+      this.currentState = GlobalState.LOADING;
+      const data = await firstValueFrom(this.http.get<ICombo[]>('http://localhost:5093/api/v1/professor/combo'));
+      this.comboProfessores = data;
+    } catch (error) {
+      this.currentState = GlobalState.ERROR;
+    } finally {
+      this.currentState = GlobalState.IDLE;
+    }
+  }
+
+  async getDisciplinas() {
+    try {
+      this.currentState = GlobalState.LOADING;
+      const data = await firstValueFrom(this.http.get<ICombo[]>('http://localhost:5093/api/v1/disciplina/combo'));
+      this.comboDisciplina = data;
+    } catch (error) {
+      this.currentState = GlobalState.ERROR;
+    } finally {
+      this.currentState = GlobalState.IDLE;
+    }
+  }
+
+  async getTurmas() {
+    try {
+      this.currentState = GlobalState.LOADING;
+      const data = await firstValueFrom(this.http.get<ICombo[]>('http://localhost:5093/api/v1/turma/combo'));
+      this.comboTurma = data;
+    } catch (error) {
+      this.currentState = GlobalState.ERROR;
+    } finally {
+      this.currentState = GlobalState.IDLE;
+    }
+  }
+
+
+  async getSalas() {
+    try {
+      this.currentState = GlobalState.LOADING;
+      const data = await firstValueFrom(this.http.get<ICombo[]>('http://localhost:5093/api/v1/sala/combo'));
+      this.comboSala = data;
+    } catch (error) {
+      this.currentState = GlobalState.ERROR;
+    } finally {
+      this.currentState = GlobalState.IDLE;
+    }
+  }
+
+
+
+  async salvarEdicaoAtribuicao() {
+    if (this.editAtribuicaoForm.invalid) return;
+    this.currentState = GlobalState.LOADING;
+    const dto = this.editAtribuicaoForm.value;
+    const salaId = this.editAtribuicaoContext.salaId;
+    const oldUserId = this.editAtribuicaoContext.professorId;
+
+    try {
+      await firstValueFrom(
+        this.http.put(
+          `http://localhost:5093/api/v1/atribuicoes?salaId=${salaId}&oldUserId=${oldUserId}`,
+          dto,
+          { responseType: 'text' }
+        )
+      );
+      this.fecharEditModal();
+      window.location.reload();
+    } catch (err) {
+      alert('Erro ao editar atribuição.');
+    } finally {
+      this.currentState = GlobalState.IDLE;
+    }
+  }
+
   async getAtribuições() {
     try {
       this.currentState = GlobalState.LOADING;
@@ -112,9 +220,8 @@ export class AtribuicoesComponent implements OnInit {
       && date1.getMonth() === date2.getMonth()
       && date1.getDate() === date2.getDate();
   }
+
   async removerAtribuicao(event: any) {
-
-
     if (!confirm('Tem certeza que deseja remover esta atribuição?')) return;
     this.currentState = GlobalState.LOADING;
     try {
@@ -124,7 +231,7 @@ export class AtribuicoesComponent implements OnInit {
       const turmaId = event.turmaId || event.turma?.id;
       // O dia pode estar em event.start ou event.dia
       const dia = event.dia
-      console.log(event);
+
 
       // Monte a URL com query params
       const url = `http://localhost:5093/api/v1/atribuicoes?userId=${userId}&salaId=${salaId}&turmaId=${turmaId}&dia=${dia}`;
@@ -160,6 +267,7 @@ export class AtribuicoesComponent implements OnInit {
     this.dailyEvents = events
       .filter(event => {
 
+        console.log(event);
 
 
         const dateParts_Info = clickInfo.dateStr.split('-');
@@ -176,7 +284,8 @@ export class AtribuicoesComponent implements OnInit {
         title: event.title,
         start: event.start,
         end: event.end,
-        color: event.backgroundColor,
+        //@ts-ignore
+        color: event.color,
         professor: event.extendedProps['professor'],
         disciplina: event.extendedProps['disciplina'],
         turma: event.extendedProps['turma'],
@@ -192,5 +301,21 @@ export class AtribuicoesComponent implements OnInit {
 
   async ngOnInit() {
     await this.getAtribuições();
+
+    await this.getDisciplinas();
+    await this.getProfessores();
+    await this.getSalas();
+    await this.getTurmas();
+
+
+
+    const usuarioStr = localStorage.getItem('usuario');
+    if (usuarioStr) {
+      try {
+        this.usuario = typeof usuarioStr === 'string' ? JSON.parse(usuarioStr) : usuarioStr;
+      } catch {
+        this.usuario = usuarioStr;
+      }
+    }
   }
 }

@@ -32,7 +32,7 @@
         <li>
             <div class="user-card-horizontal" [style.borderColor]="professor.color">
                 <div class="user-info-horizontal">
-                    <span class="prof-nome" [style.color]="professor.color"><strong>{{ professor.name }}</strong></span>
+                    <span><strong>{{ professor.name }}</strong></span>
                     <span><strong>Username:</strong> {{ professor.username }}</span>
                     <span><strong>Email:</strong> {{ professor.email }}</span>
                     <span><strong>Telefone:</strong> {{ professor.mobilePhone }}</span>
@@ -52,10 +52,14 @@
                     <button type="button" (click)="cancelarEdicao()">Cancelar</button>
                 </form>
                 <div class="action-buttons">
-                    <button class="btn-action btn-delete" type="button"
-                        (click)="excluirProfessor(professor)">Excluir</button>
+                    <button class="btn-action btn-delete" type="button" (click)="excluirProfessor(professor)"
+                        [disabled]="professor.username === 'admin'">
+                        Excluir
+                    </button>
                     <button class="btn-action btn-edit" type="button" (click)="abrirEdicao(professor)"
-                        [disabled]="loadingAction">Editar</button>
+                        [disabled]="loadingAction || professor.username === 'admin'">
+                        Editar
+                    </button>
                 </div>
             </div>
         </li>
