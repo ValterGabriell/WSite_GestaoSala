@@ -164,7 +164,7 @@ export class AtribuicoesAddComponent implements OnInit {
     try {
       this.currentState = GlobalState.LOADING;
       const data = await firstValueFrom(
-        this.http.get<IAtribuicoes[]>('http://localhost:5093/api/v1/atribuicoes')
+        this.http.get<IAtribuicoes[]>('https://wapi-sistema-gestao-salas.onrender.com/api/v1/atribuicoes')
       );
       this.atribuicoes = data;
 
@@ -182,7 +182,7 @@ export class AtribuicoesAddComponent implements OnInit {
   async getProfessores() {
     try {
       this.currentState = GlobalState.LOADING;
-      const data = await firstValueFrom(this.http.get<ICombo[]>('http://localhost:5093/api/v1/professor/combo'));
+      const data = await firstValueFrom(this.http.get<ICombo[]>('https://wapi-sistema-gestao-salas.onrender.com/api/v1/professor/combo'));
       this.comboProfessores = data.map(p => ({
         id: String(p.id), // converte sempre para string
         label: p.label
@@ -197,7 +197,7 @@ export class AtribuicoesAddComponent implements OnInit {
   async getDisciplinas() {
     try {
       this.currentState = GlobalState.LOADING;
-      const data = await firstValueFrom(this.http.get<ICombo[]>('http://localhost:5093/api/v1/disciplina/combo'));
+      const data = await firstValueFrom(this.http.get<ICombo[]>('https://wapi-sistema-gestao-salas.onrender.com/api/v1/disciplina/combo'));
       this.comboDisciplina = data;
     } catch (error) {
       this.currentState = GlobalState.ERROR;
@@ -209,7 +209,7 @@ export class AtribuicoesAddComponent implements OnInit {
   async getTurmas() {
     try {
       this.currentState = GlobalState.LOADING;
-      const data = await firstValueFrom(this.http.get<ICombo[]>('http://localhost:5093/api/v1/turma/combo'));
+      const data = await firstValueFrom(this.http.get<ICombo[]>('https://wapi-sistema-gestao-salas.onrender.com/api/v1/turma/combo'));
       this.comboTurma = data;
     } catch (error) {
       this.currentState = GlobalState.ERROR;
@@ -222,7 +222,7 @@ export class AtribuicoesAddComponent implements OnInit {
   async getSalas() {
     try {
       this.currentState = GlobalState.LOADING;
-      const data = await firstValueFrom(this.http.get<ICombo[]>('http://localhost:5093/api/v1/sala/combo'));
+      const data = await firstValueFrom(this.http.get<ICombo[]>('https://wapi-sistema-gestao-salas.onrender.com/api/v1/sala/combo'));
       this.comboSala = data;
     } catch (error) {
       this.currentState = GlobalState.ERROR;
@@ -282,7 +282,7 @@ export class AtribuicoesAddComponent implements OnInit {
       console.log(this.atribuirAulaForm.value)
       try {
         const resp: any = await firstValueFrom(
-          this.http.post('http://localhost:5093/api/v1/atribuicoes', atribuirAula)
+          this.http.post('https://wapi-sistema-gestao-salas.onrender.com/api/v1/atribuicoes', atribuirAula)
         );
         // Se a resposta tem errors e não está vazia
         if (resp.errors && resp.errors.length > 0) {

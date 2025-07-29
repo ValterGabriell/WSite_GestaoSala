@@ -39,7 +39,7 @@ export class SalasComponent {
     if (this.search) params = params.set('Search', this.search);
     if (this.isActive !== '') params = params.set('IsActive', this.isActive);
 
-    this.http.get<DtoGetSala[]>('http://localhost:5093/api/v1/sala', { params })
+    this.http.get<DtoGetSala[]>('https://wapi-sistema-gestao-salas.onrender.com/api/v1/sala', { params })
       .subscribe({
         next: (res) => {
           this.salas = res;
@@ -67,7 +67,7 @@ export class SalasComponent {
   salvarEdicao(sala: DtoGetSala) {
     const dto = { name: this.editName };
     this.loading = true;
-    this.http.put(`http://localhost:5093/api/v1/sala/${sala.id}`, dto)
+    this.http.put(`https://wapi-sistema-gestao-salas.onrender.com/api/v1/sala/${sala.id}`, dto)
       .subscribe({
         next: () => {
           sala.name = this.editName;
@@ -85,7 +85,7 @@ export class SalasComponent {
   excluirSala(sala: DtoGetSala) {
     const dto = { name: this.editName };
     this.loading = true;
-    this.http.delete(`http://localhost:5093/api/v1/sala/${sala.id}`)
+    this.http.delete(`https://wapi-sistema-gestao-salas.onrender.com/api/v1/sala/${sala.id}`)
       .subscribe({
         next: () => {
           sala.name = this.editName;

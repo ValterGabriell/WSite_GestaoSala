@@ -125,7 +125,7 @@ export class AtribuicoesComponent implements OnInit {
   async getProfessores() {
     try {
       this.currentState = GlobalState.LOADING;
-      const data = await firstValueFrom(this.http.get<ICombo[]>('http://localhost:5093/api/v1/professor/combo'));
+      const data = await firstValueFrom(this.http.get<ICombo[]>('https://wapi-sistema-gestao-salas.onrender.com/api/v1/professor/combo'));
       this.comboProfessores = data;
     } catch (error) {
       this.currentState = GlobalState.ERROR;
@@ -137,7 +137,7 @@ export class AtribuicoesComponent implements OnInit {
   async getDisciplinas() {
     try {
       this.currentState = GlobalState.LOADING;
-      const data = await firstValueFrom(this.http.get<ICombo[]>('http://localhost:5093/api/v1/disciplina/combo'));
+      const data = await firstValueFrom(this.http.get<ICombo[]>('https://wapi-sistema-gestao-salas.onrender.com/api/v1/disciplina/combo'));
       this.comboDisciplina = data;
     } catch (error) {
       this.currentState = GlobalState.ERROR;
@@ -149,7 +149,7 @@ export class AtribuicoesComponent implements OnInit {
   async getTurmas() {
     try {
       this.currentState = GlobalState.LOADING;
-      const data = await firstValueFrom(this.http.get<ICombo[]>('http://localhost:5093/api/v1/turma/combo'));
+      const data = await firstValueFrom(this.http.get<ICombo[]>('https://wapi-sistema-gestao-salas.onrender.com/api/v1/turma/combo'));
       this.comboTurma = data;
     } catch (error) {
       this.currentState = GlobalState.ERROR;
@@ -162,7 +162,7 @@ export class AtribuicoesComponent implements OnInit {
   async getSalas() {
     try {
       this.currentState = GlobalState.LOADING;
-      const data = await firstValueFrom(this.http.get<ICombo[]>('http://localhost:5093/api/v1/sala/combo'));
+      const data = await firstValueFrom(this.http.get<ICombo[]>('https://wapi-sistema-gestao-salas.onrender.com/api/v1/sala/combo'));
       this.comboSala = data;
     } catch (error) {
       this.currentState = GlobalState.ERROR;
@@ -183,7 +183,7 @@ export class AtribuicoesComponent implements OnInit {
     try {
       await firstValueFrom(
         this.http.put(
-          `http://localhost:5093/api/v1/atribuicoes?salaId=${salaId}&oldUserId=${oldUserId}`,
+          `https://wapi-sistema-gestao-salas.onrender.com/api/v1/atribuicoes?salaId=${salaId}&oldUserId=${oldUserId}`,
           dto,
           { responseType: 'text' }
         )
@@ -201,7 +201,7 @@ export class AtribuicoesComponent implements OnInit {
     try {
       this.currentState = GlobalState.LOADING;
       const data = await firstValueFrom(
-        this.http.get<IAtribuicoes[]>('http://localhost:5093/api/v1/atribuicoes')
+        this.http.get<IAtribuicoes[]>('https://wapi-sistema-gestao-salas.onrender.com/api/v1/atribuicoes')
       );
       this.atribuicoes = data;
 
@@ -237,7 +237,7 @@ export class AtribuicoesComponent implements OnInit {
 
 
         // Monte a URL com query params
-        const url = `http://localhost:5093/api/v1/atribuicoes?userId=${userId}&salaId=${salaId}&turmaId=${turmaId}&dia=${dia}`;
+        const url = `https://wapi-sistema-gestao-salas.onrender.com/api/v1/atribuicoes?userId=${userId}&salaId=${salaId}&turmaId=${turmaId}&dia=${dia}`;
 
         await firstValueFrom(
           this.http.delete(url)
@@ -262,7 +262,7 @@ export class AtribuicoesComponent implements OnInit {
 
 
         // Monte a URL com query params
-        const url = `http://localhost:5093/api/v1/atribuicoes/todos?userId=${userId}&salaId=${salaId}&turmaId=${turmaId}`;
+        const url = `https://wapi-sistema-gestao-salas.onrender.com/api/v1/atribuicoes/todos?userId=${userId}&salaId=${salaId}&turmaId=${turmaId}`;
 
         await firstValueFrom(
           this.http.delete(url)

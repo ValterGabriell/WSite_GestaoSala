@@ -45,7 +45,7 @@ export class TurmasComponent {
     this.mensagem = '';
     this.mensagemErro = '';
     try {
-      const data = await this.http.get<Turma[]>('http://localhost:5093/api/v1/turma').toPromise();
+      const data = await this.http.get<Turma[]>('https://wapi-sistema-gestao-salas.onrender.com/api/v1/turma').toPromise();
       this.turmas = data ?? [];
     } catch (err: any) {
       this.mensagemErro = err?.error || err?.message || 'Erro ao carregar turmas.';
@@ -108,7 +108,7 @@ export class TurmasComponent {
       turno: typeof this.editTurma.turno === 'string' ? parseInt(this.editTurma.turno, 10) : this.editTurma.turno
     };
     try {
-      await this.http.put(`http://localhost:5093/api/v1/turma/${this.editTurma.id}`, dto, { responseType: 'text' }).toPromise();
+      await this.http.put(`https://wapi-sistema-gestao-salas.onrender.com/api/v1/turma/${this.editTurma.id}`, dto, { responseType: 'text' }).toPromise();
       this.mensagem = 'Turma editada com sucesso!';
       this.editTurma = null;
       await this.getTurmas();
@@ -125,7 +125,7 @@ export class TurmasComponent {
     this.mensagem = '';
     this.mensagemErro = '';
     try {
-      await this.http.delete(`http://localhost:5093/api/v1/turma/${turma.id}`, { responseType: 'text' }).toPromise();
+      await this.http.delete(`https://wapi-sistema-gestao-salas.onrender.com/api/v1/turma/${turma.id}`, { responseType: 'text' }).toPromise();
       this.mensagem = 'Turma excluída com sucesso!';
       await this.getTurmas();
     } catch (err: any) {

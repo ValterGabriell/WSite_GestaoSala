@@ -51,7 +51,7 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.loading = true;
       this.http.post<{ token: string, usuario: Usuario }>(
-        'http://localhost:5093/api/v1/auth/admin',
+        'https://wapi-sistema-gestao-salas.onrender.com/api/v1/auth/admin',
         this.loginForm.value
       ).subscribe({
         next: (res) => {

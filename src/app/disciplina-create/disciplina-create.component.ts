@@ -28,7 +28,7 @@ export class DisciplinaAddComponent {
   onSubmit() {
     if (this.disciplinaForm.valid) {
       this.loading = true;
-      this.http.post('http://localhost:5093/api/v1/disciplina', this.disciplinaForm.value, { responseType: 'text' })
+      this.http.post('https://wapi-sistema-gestao-salas.onrender.com/api/v1/disciplina', this.disciplinaForm.value, { responseType: 'text' })
         .subscribe({
           next: (res) => {
             this.mensagem = res || 'Disciplina criada com sucesso!';

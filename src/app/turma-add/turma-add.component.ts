@@ -41,7 +41,7 @@ export class TurmaAddComponent {
       nome: this.nome
     };
     try {
-      await this.http.post('http://localhost:5093/api/v1/turma', dto, { responseType: 'text' }).toPromise();
+      await this.http.post('https://wapi-sistema-gestao-salas.onrender.com/api/v1/turma', dto, { responseType: 'text' }).toPromise();
       this.mensagem = 'Turma criada com sucesso!';
       this.nome = '';
       this.bloco = null;

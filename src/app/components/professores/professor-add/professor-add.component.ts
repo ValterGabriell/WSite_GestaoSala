@@ -32,7 +32,7 @@ export class ProfessorAddComponent {
         if (this.professorForm.valid) {
             this.loading = true;
             this.http.post(
-                'http://localhost:5093/api/v1/professor',
+                'https://wapi-sistema-gestao-salas.onrender.com/api/v1/professor',
                 this.professorForm.value,
                 { responseType: 'text' }
             ).subscribe({

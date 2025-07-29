@@ -36,7 +36,7 @@ export class DisciplinasComponent {
   async getDisciplinas() {
     try {
       this.currentState = GlobalState.LOADING;
-      const data = await firstValueFrom(this.http.get<IDisciplina[]>('http://localhost:5093/api/v1/disciplina'));
+      const data = await firstValueFrom(this.http.get<IDisciplina[]>('https://wapi-sistema-gestao-salas.onrender.com/api/v1/disciplina'));
       this.listaDisciplina = {
         success: true,
         message: 'Disciplinas carregadas com sucesso',
@@ -88,7 +88,7 @@ export class DisciplinasComponent {
     };
     try {
       await firstValueFrom(
-        this.http.put(`http://localhost:5093/api/v1/disciplina?id=${this.editDisciplina.id}`, dto)
+        this.http.put(`https://wapi-sistema-gestao-salas.onrender.com/api/v1/disciplina?id=${this.editDisciplina.id}`, dto)
       );
 
       this.editDisciplina = null;
@@ -107,7 +107,7 @@ export class DisciplinasComponent {
     this.loadingAction = true;
     try {
       await firstValueFrom(
-        this.http.delete(`http://localhost:5093/api/v1/disciplina/${disciplina.id}`)
+        this.http.delete(`https://wapi-sistema-gestao-salas.onrender.com/api/v1/disciplina/${disciplina.id}`)
       );
 
     } catch (err: any) {

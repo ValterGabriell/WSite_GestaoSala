@@ -49,7 +49,7 @@ export class ProfessoresComponent {
   async getProfessores() {
     try {
       this.currentState = GlobalState.LOADING;
-      const data = await firstValueFrom(this.http.get<IProfessor[]>('http://localhost:5093/api/v1/professor', {
+      const data = await firstValueFrom(this.http.get<IProfessor[]>('https://wapi-sistema-gestao-salas.onrender.com/api/v1/professor', {
         params: {
           Search: '',
           IsActive: true,
@@ -113,7 +113,7 @@ export class ProfessoresComponent {
 
 
       await firstValueFrom(
-        this.http.put(`http://localhost:5093/api/v1/professor/${prof.id}`, body, { responseType: 'text' })
+        this.http.put(`https://wapi-sistema-gestao-salas.onrender.com/api/v1/professor/${prof.id}`, body, { responseType: 'text' })
       );
       this.mensagem = 'Professor atualizado com sucesso!';
       this.editandoId = null;
@@ -149,7 +149,7 @@ export class ProfessoresComponent {
     this.mensagemErro = '';
     try {
       await firstValueFrom(
-        this.http.delete(`http://localhost:5093/api/v1/professor/${professor.id}`, { responseType: 'text' })
+        this.http.delete(`https://wapi-sistema-gestao-salas.onrender.com/api/v1/professor/${professor.id}`, { responseType: 'text' })
       );
       this.mensagem = 'Professor excluído com sucesso!';
       await this.getProfessores();

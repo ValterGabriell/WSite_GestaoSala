@@ -21,7 +21,7 @@ export class SalaAddComponent {
     // Monta o DTO conforme esperado pelo backend
     const dto: { name: string } = { name: this.name };
 
-    this.http.post<string>('http://localhost:5093/api/v1/sala', dto)
+    this.http.post<string>('https://wapi-sistema-gestao-salas.onrender.com/api/v1/sala', dto)
       .subscribe({
         next: (res) => {
           this.mensagem = 'Sala criada com sucesso!';
