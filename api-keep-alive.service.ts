@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
     providedIn: 'root'
 })
 export class ApiKeepAliveService {
-    private url = 'https://wapi-sistema-gestao-salas.onrender.com/imhere';
+    private url = 'https://wapi-sistema-gestao-salas.onrender.com/api/v1/atribuicoes/imhere';
     private interval = 30000; // 30 segundos
 
     constructor(private http: HttpClient) {
