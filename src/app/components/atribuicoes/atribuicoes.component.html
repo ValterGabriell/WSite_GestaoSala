@@ -61,8 +61,11 @@
                 </div>
                 <button class="btn-add" (click)="abrirEditModal(event)" style="margin-top: 10px;">
                     Editar atribuição </button>
-                <button class="btn-cancel" (click)="removerAtribuicao(event)" style="margin-top: 10px;">
+                <button class="btn-cancel" (click)="removerAtribuicao(event, false)" style="margin-top: 10px;">
                     Remover atribuição
+                </button>
+                <button class="btn-cancel" (click)="removerAtribuicao(event, true)" style="margin-top: 10px;">
+                    Remover todas as atribuições
                 </button>
             </li>
         </ul>
@@ -77,8 +80,8 @@
                     <div class="form-group">
                         <label>Professor:</label>
                         <select formControlName="userId" class="form-control">
-                            <option *ngFor="let professor of comboProfessores" [value]="professor.id">{{ professor.label
-                                }}
+                            <option *ngFor="let professor of comboProfessores" [value]="professor.id">{{
+                                professor.label}}
                             </option>
                         </select>
                     </div>

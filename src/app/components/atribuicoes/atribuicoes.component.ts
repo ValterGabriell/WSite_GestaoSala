@@ -221,33 +221,63 @@ export class AtribuicoesComponent implements OnInit {
       && date1.getDate() === date2.getDate();
   }
 
-  async removerAtribuicao(event: any) {
-    if (!confirm('Tem certeza que deseja remover esta atribuição?')) return;
-    this.currentState = GlobalState.LOADING;
-    try {
-      // Pegue os parâmetros necessários do evento
-      const userId = event.professorId;
-      const salaId = event.salaId || event.sala?.id;
-      const turmaId = event.turmaId || event.turma?.id;
-      // O dia pode estar em event.start ou event.dia
-      const dia = event.dia
+  async removerAtribuicao(event: any, removerTodas: boolean = false) {
 
 
-      // Monte a URL com query params
-      const url = `http://localhost:5093/api/v1/atribuicoes?userId=${userId}&salaId=${salaId}&turmaId=${turmaId}&dia=${dia}`;
+    if (removerTodas === false) {
+      if (!confirm('Tem certeza que deseja remover esta atribuição?')) return;
+      this.currentState = GlobalState.LOADING;
+      try {
+        // Pegue os parâmetros necessários do evento
+        const userId = event.professorId;
+        const salaId = event.salaId || event.sala?.id;
+        const turmaId = event.turmaId || event.turma?.id;
+        // O dia pode estar em event.start ou event.dia
+        const dia = event.dia
 
-      await firstValueFrom(
-        this.http.delete(url)
-      );
-      window.location.reload();
-      if (this.selectedDate) {
-        this.handleDateClick({ dateStr: this.selectedDate.toISOString().split('T')[0], date: this.selectedDate } as any);
+
+        // Monte a URL com query params
+        const url = `http://localhost:5093/api/v1/atribuicoes?userId=${userId}&salaId=${salaId}&turmaId=${turmaId}&dia=${dia}`;
+
+        await firstValueFrom(
+          this.http.delete(url)
+        );
+        window.location.reload();
+        if (this.selectedDate) {
+          this.handleDateClick({ dateStr: this.selectedDate.toISOString().split('T')[0], date: this.selectedDate } as any);
+        }
+      } catch (err) {
+        alert('Erro ao remover atribuição.');
+      } finally {
+        this.currentState = GlobalState.IDLE;
       }
-    } catch (err) {
-      alert('Erro ao remover atribuição.');
-    } finally {
-      this.currentState = GlobalState.IDLE;
+    } else {
+      if (!confirm('Tem certeza que deseja remover TODAS as atribuições DESSE PROFESSOR?')) return;
+      try {
+        this.currentState = GlobalState.LOADING;
+        // Pegue os parâmetros necessários do evento
+        const userId = event.professorId;
+        const salaId = event.salaId || event.sala?.id;
+        const turmaId = event.turmaId || event.turma?.id;
+
+
+        // Monte a URL com query params
+        const url = `http://localhost:5093/api/v1/atribuicoes/todos?userId=${userId}&salaId=${salaId}&turmaId=${turmaId}`;
+
+        await firstValueFrom(
+          this.http.delete(url)
+        );
+        window.location.reload();
+        if (this.selectedDate) {
+          this.handleDateClick({ dateStr: this.selectedDate.toISOString().split('T')[0], date: this.selectedDate } as any);
+        }
+      } catch (err) {
+        alert('Erro ao remover atribuição.');
+      } finally {
+        this.currentState = GlobalState.IDLE;
+      }
     }
+
   }
 
   handleDateClick(clickInfo: DateClickArg) {

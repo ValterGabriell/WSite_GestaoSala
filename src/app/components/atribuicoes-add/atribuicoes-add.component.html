@@ -7,7 +7,7 @@
     <div class="layout-columns">
 
         <!-- Formulário à esquerda -->
-        <form [formGroup]="atribuirAulaForm" (ngSubmit)="submitForm()" class="form-container">
+        <form *ngIf="atribuirAulaForm" [formGroup]="atribuirAulaForm" (ngSubmit)="submitForm()" class="form-container">
             <!-- Botão de envio -->
             <div class="form-actions">
                 <button class="btn-submit">Atribuir Aulas</button>
@@ -17,7 +17,7 @@
                 <!-- Linha 1: Professor e Turma -->
                 <div class="form-group">
                     <label for="professor">Professor:</label>
-                    <select id="professor" formControlName="professorId" class="form-control">
+                    <select formControlName="userId" class="form-control">
                         <option *ngFor="let professor of comboProfessores" [value]="professor.id">{{ professor.label }}
                         </option>
                     </select>
@@ -65,6 +65,12 @@
                 </ul>
                 <button (click)="limparSelecoes()">Limpar seleções</button>
             </div>
+            <div *ngIf="mensagem" class="mensagem-sucesso" [ngClass]="{'erro': erros.length > 0}">
+                {{ mensagem }}
+                <ul *ngIf="erros.length > 0" class="mensagem-erros">
+                    <li *ngFor="let erro of erros">{{ erro }}</li>
+                </ul>
+            </div>
         </form>
 
         <!-- Calendário à direita -->
@@ -87,6 +93,11 @@
                 </p>
             </div>
         </div>
-
+        <div *ngIf="currentState === gs.LOADING" class="loading-overlay">
+            <div class="loading-spinner">
+                <span class="spinner"></span>
+                Atribuindo aulas...
+            </div>
+        </div>
     </div>
 </div>

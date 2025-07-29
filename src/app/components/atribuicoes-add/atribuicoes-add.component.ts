@@ -20,7 +20,7 @@ import { HeaderComponent } from "../../shared/header/header.component";
 
 
 interface ICombo {
-  id: string | number,
+  id: string,
   label: string
 }
 
@@ -39,16 +39,17 @@ export class AtribuicoesAddComponent implements OnInit {
   name = new FormControl('');
   eventosCache: any;
 
-  comboDisciplina: ICombo[] = {} as ICombo[];
-  comboProfessores: ICombo[] = {} as ICombo[];
-  comboTurma: ICombo[] = {} as ICombo[];
-  comboSala: ICombo[] = {} as ICombo[];
+  comboDisciplina: ICombo[] = [];         // CORRETO
+  comboProfessores: ICombo[] = [];
+  comboTurma: ICombo[] = [];
+  comboSala: ICombo[] = [];
+  atribuirAulaForm!: FormGroup;
 
-  //@ts-ignore
-  atribuirAulaForm: FormGroup;
   currentState = GlobalState.IDLE;
   atribuicoes: IAtribuicoes[] = [];
-
+  gs = GlobalState;
+  mensagem: string = '';
+  erros: string[] = [];
 
 
   daysOfWeek = [
@@ -147,6 +148,8 @@ export class AtribuicoesAddComponent implements OnInit {
   }
 
   toggleDaySelection(date: Date): void {
+    this.mensagem = '';
+    this.erros = [];
     const dateString = this.formatDate(date);
     const index = this.diasSelecionadosParaAtribuicao.indexOf(dateString);
 
@@ -180,7 +183,10 @@ export class AtribuicoesAddComponent implements OnInit {
     try {
       this.currentState = GlobalState.LOADING;
       const data = await firstValueFrom(this.http.get<ICombo[]>('http://localhost:5093/api/v1/professor/combo'));
-      this.comboProfessores = data;
+      this.comboProfessores = data.map(p => ({
+        id: String(p.id), // converte sempre para string
+        label: p.label
+      }));
     } catch (error) {
       this.currentState = GlobalState.ERROR;
     } finally {
@@ -230,18 +236,41 @@ export class AtribuicoesAddComponent implements OnInit {
     return date.toISOString().split('T')[0]; // Formato 'YYYY-MM-DD'
   }
 
-  submitForm() {
+
+  onProfessorChange(event: Event) {
+    const select = event.target as HTMLSelectElement;
+    const value = select.value;
+    console.log('Professor selecionado:', value);
+    // Se quiser o objeto completo:
+    const professor = this.comboProfessores.find(p => p.id == value);
+    console.log('Professor objeto:', professor);
+  }
+
+  async submitForm() {
+    this.mensagem = '';
+    this.erros = [];
     this.currentState = GlobalState.LOADING;
+
+    this.mensagem = '';
+    this.erros = [];
+    if (this.diasSelecionadosParaAtribuicao.length === 0) {
+      this.mensagem = 'Nenhum dia selecionado para atribuição.';
+      this.erros.push('Selecione pelo menos um dia para atribuir a aula.');
+      this.currentState = GlobalState.IDLE;
+      return;
+    }
+
     const formData = {
       ...this.atribuirAulaForm.value,
       diasSelecionados: this.diasSelecionadosParaAtribuicao
     };
 
+    let errosTemp: string[] = [];
+    let sucesso = false;
 
-    //@ts-ignore
-    formData.diasSelecionados.forEach((dia) => {
+    for (const dia of formData.diasSelecionados) {
       const atribuirAula: IPostAtribuicao = {
-        userId: formData.professorId,
+        userId: formData.userId, // <-- agora pega o valor correto
         salaId: formData.salaId,
         disciplinaId: formData.disciplinaId,
         turmaID: formData.turmaId,
@@ -249,33 +278,42 @@ export class AtribuicoesAddComponent implements OnInit {
         horaInicial: formData.startTime,
         horaFinal: formData.endTime
       };
-      console.log('Dados do formulário:', atribuirAula);
-      this.http.post<IPostAtribuicao>('http://localhost:5093/api/v1/atribuicoes', atribuirAula).subscribe(() => {
-        this.currentState = GlobalState.IDLE;
-      });
-    })
 
-    // // const atribuirAula: IPostAtribuicao = {
-    // //   userId: this.atribuirAulaForm.value.professorId,
-    // //   salaId: this.atribuirAulaForm.value.salaId,
-    // //   disciplinaId: this.atribuirAulaForm.value.disciplinaId;
-    // //   turmaID: this.atribuirAulaForm.value.turmaId,
-    // //   diaDeAulaDaSemana: ;
-    // //   horaInicial: number;
-    // //   horaFinal: number;
-    // // }
+      console.log(this.atribuirAulaForm.value)
+      try {
+        const resp: any = await firstValueFrom(
+          this.http.post('http://localhost:5093/api/v1/atribuicoes', atribuirAula)
+        );
+        // Se a resposta tem errors e não está vazia
+        if (resp.errors && resp.errors.length > 0) {
+          errosTemp.push(...resp.errors);
+        } else {
+          sucesso = true;
 
+        }
+      } catch (err: any) {
+        // Se a API retorna erro 400 com corpo contendo errors
+        if (err.error && err.error.errors) {
+          errosTemp.push(...err.error.errors);
+        } else {
+          errosTemp.push('Erro inesperado ao salvar atribuição.');
+        }
+      }
+    }
 
+    this.currentState = GlobalState.IDLE;
+
+    if (errosTemp.length === 0) {
+      this.mensagem = 'Entidade gerada!';
+      window.location.reload();
+    } else {
+      this.erros = errosTemp;
+      this.mensagem = 'Nem todas as atribuições puderam ser salvas';
+    }
   }
-
-  async ngOnInit() {
-    await this.getAtribuições();
-    await this.getDisciplinas();
-    await this.getProfessores();
-    await this.getSalas();
-    await this.getTurmas();
+  initForm() {
     this.atribuirAulaForm = new FormGroup({
-      professorId: new FormControl(this.comboProfessores.length ? this.comboProfessores[0].id : null),
+      userId: new FormControl(this.comboProfessores.length ? this.comboProfessores[0].id : null),
       salaId: new FormControl(this.comboSala.length ? this.comboSala[0].id : null),
       disciplinaId: new FormControl(this.comboDisciplina.length ? this.comboDisciplina[0].id : null),
       turmaId: new FormControl(this.comboTurma.length ? this.comboTurma[0].id : null),
@@ -283,6 +321,14 @@ export class AtribuicoesAddComponent implements OnInit {
       startTime: new FormControl(''),
       endTime: new FormControl('')
     });
+  }
+  async ngOnInit() {
+    await this.getAtribuições();
+    await this.getDisciplinas();
+    await this.getProfessores();
+    await this.getSalas();
+    await this.getTurmas();
+    this.initForm(); // Inicialize o formulário após combos carregados!
   }
 
 }

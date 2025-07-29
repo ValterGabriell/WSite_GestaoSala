@@ -64,14 +64,11 @@ export interface IPostAtribuicao {
 
 
 export function converterParaEventos(atribuicoes: IAtribuicoes[]): EventSourceInput {
-
     return atribuicoes.flatMap(dia => {
         return dia.salas.map(sala => {
-            const start = new Date(dia.dia);
-            start.setHours(sala.horaInit, 0, 0);
-
-            const end = new Date(dia.dia);
-            end.setHours(sala.horaFinal, 0, 0);
+            // Correção: força data local
+            const start = parseDateLocal(dia.dia, sala.horaInit);
+            const end = parseDateLocal(dia.dia, sala.horaFinal);
 
             return {
                 id: `sala-${sala.salaId}-${dia.dia}`,
@@ -97,4 +94,10 @@ export function converterParaEventos(atribuicoes: IAtribuicoes[]): EventSourceIn
             } as EventInput;
         });
     });
+}
+
+// Adicione essa função no mesmo arquivo:
+function parseDateLocal(dateStr: string, hora: number): Date {
+    const [year, month, day] = dateStr.split('-');
+    return new Date(Number(year), Number(month) - 1, Number(day), hora, 0, 0);
 }
