@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from "./shared/header/header.component";
 import { AuthService } from './AuthService';
+import { ApiKeepAliveService } from '../../api-keep-alive.service';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ import { AuthService } from './AuthService';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  constructor(private auth: AuthService, private router: Router) {
+  constructor(private auth: AuthService, private router: Router, private apiKeepAlive: ApiKeepAliveService) {
     setInterval(() => {
       console.log('Verificando token...');
       console.log(auth);
